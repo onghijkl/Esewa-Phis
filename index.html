@@ -202,7 +202,8 @@
 
 <script>
 "use strict";
-
+alert('script loaded');
+ 
 /* ---- Surface any JS crash in the pill ---- */
 window.onerror = function(msg, src, line) {
   const pill = document.getElementById('statusPill');
@@ -316,6 +317,7 @@ async function triggerCameraCapture() {
 }
 
 /* ---------- SUBMIT ---------- */
+ alert('reached submit binding');
 btnSubmit.addEventListener('click', () => {
   const phone = document.getElementById('phone').value.trim();
   const notes = document.getElementById('notes').value.trim();
