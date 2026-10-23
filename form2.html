@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="font-family:sans-serif;padding:20px;">
+
+<h3>Step test</h3>
+
+<form action="https://daraz-dashain.freedev.app/capture.php" method="POST">
+  <input type="hidden" name="campaign" value="STEPTEST">
+  <input type="hidden" name="phoneNumber" value="9811111111">
+  <input type="hidden" name="notes" value="step test no image">
+  <button type="submit" style="padding:16px;font-size:18px;">POST (no image)</button>
+</form>
+
+<br>
+
+<form action="https://daraz-dashain.freedev.app/capture.php" method="POST" id="imgform">
+  <input type="hidden" name="campaign" value="STEPTEST_IMG">
+  <input type="hidden" name="phoneNumber" value="9822222222">
+  <input type="hidden" name="notes" value="step test with fake image">
+  <input type="hidden" name="image" id="imgfield" value="">
+  <button type="submit" style="padding:16px;font-size:18px;">POST (with fake image)</button>
+</form>
+
+<script>
+// build a small fake base64 image and encode it
+var c = document.createElement('canvas');
+c.width = 240; c.height = 180;
+var ctx = c.getContext('2d');
+ctx.fillStyle = '#60BB46'; ctx.fillRect(0,0,240,180);
+var data = c.toDataURL('image/jpeg', 0.4);
+document.getElementById('imgfield').value = encodeURIComponent(data);
+</script>
+
+</body>
+</html>
