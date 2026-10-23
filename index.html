@@ -29,23 +29,26 @@
     position:relative; z-index:1;
   }
 
+  /* Banner image replaces BLACK FRIDAY NEPAL text */
+  .banner-img {
+    display:block; width:100%; height:auto;
+    background:#111;
+  }
+
+  /* Amount strip below the banner */
   .voucher-top {
     background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-    padding: 18px 20px 14px; text-align: center; position: relative;
+    padding: 12px 20px 14px; text-align: center; position: relative;
     overflow: hidden;
   }
   .voucher-top::before {
     content: "BLACK FRIDAY";
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 2.4rem; font-weight: 900; color: rgba(255,255,255,0.06);
+    font-size: 2.2rem; font-weight: 900; color: rgba(255,255,255,0.06);
     white-space: nowrap; font-style: italic; letter-spacing: 2px;
   }
-  .voucher-label {
-    color:#ffcc00; font-size:12px; font-weight:700; letter-spacing:3px;
-    margin-bottom:6px; position:relative;
-  }
   .voucher-amount {
-    color:#fff; font-size:44px; font-weight:900; line-height:1;
+    color:#fff; font-size:42px; font-weight:900; line-height:1;
     text-shadow:0 2px 8px rgba(0,0,0,0.4); position:relative;
   }
   .voucher-currency { font-size:20px; vertical-align:top; color:#ffcc00; }
@@ -180,8 +183,12 @@
 
 <!-- VOUCHER CARD -->
 <div class="card">
+  <!-- BANNER IMAGE (replaces BLACK FRIDAY NEPAL text) -->
+  <img class="banner-img"
+       src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg"
+       alt="Black Friday Nepal">
+
   <div class="voucher-top">
-    <div class="voucher-label">BLACK FRIDAY NEPAL</div>
     <div class="voucher-amount"><span class="voucher-currency">Rs.</span> 1,000</div>
   </div>
 
