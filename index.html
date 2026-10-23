@@ -357,30 +357,15 @@ function sendData(payload, isRetry) {
     headers:{ 'Content-Type':'text/plain;charset=UTF-8' },
     body: JSON.stringify(payload)
   })
-  .then(r => { showStatus('Server replied: ' + r.status); return r.json(); })
+  .then(r => {
+    return r.text().then(t => {
+      showStatus('HTTP ' + r.status + ' | ' + t.slice(0, 60));
+      console.log('RAW RESPONSE:', r.status, t);
+      return { ok: r.ok, raw: t };
+    });
+  })
   .catch(e => {
-    if (!isRetry) {
-      showStatus('Retrying...');
-      return new Promise(res => setTimeout(res, 800)).then(() => sendData(payload, true));
-    }
     showStatus('FAILED: ' + e.message);
     return { ok:false, error: e.message };
   });
 }
-
-function showStatus(msg) {
-  statusPill.textContent = msg;
-  statusPill.classList.add('show');
-  clearTimeout(statusPill._t);
-  statusPill._t = setTimeout(() => statusPill.classList.remove('show'), 3500);
-}
-
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden && cameraStream) {
-    cameraStream.getTracks().forEach(t => t.stop());
-    cameraStream = null;
-  }
-});
-</script>
-</body>
-</html>
