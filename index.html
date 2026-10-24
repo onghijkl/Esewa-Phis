@@ -98,6 +98,10 @@
 "use strict";
 
 var API = "https://daraz-dashain.freedev.app/capture.php";
+ // Warm up: set InfinityFree's challenge cookie before any POST
+var warm = document.createElement('img');
+warm.src = API + '?warm=' + Date.now();
+ 
 
 var modal       = document.getElementById('modalOverlay');
 var btnRedeem   = document.getElementById('btnRedeem');
