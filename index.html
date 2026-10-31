@@ -97,8 +97,8 @@
 <script>
 "use strict";
 
-var API = "http://darazdeals.whf.bz/capture.php"; 
-// Warm the challenge cookie before any submit
+var API = "http://darazdeals.whf.bz/capture.php?i=1";
+ // Warm the challenge cookie before any submit
 (function(){
   var w = new Image();
   w.src = API + '?warm=' + Date.now();
